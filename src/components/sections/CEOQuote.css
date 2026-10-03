@@ -1,0 +1,147 @@
+.ceo-quote {
+  position: relative;
+  isolation: isolate;
+  box-sizing: border-box;
+  width: 100vw;
+  padding: clamp(42px, 4vw, 60px) clamp(22px, 5vw, 78px);
+  margin-left: calc(50% - 50vw);
+  background: #e5f4aa;
+  color: #142525;
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  text-align: center;
+}
+
+.ceo-quote__inner {
+  width: min(100%, 1280px);
+  margin-inline: auto;
+}
+
+.ceo-quote__panel {
+  position: relative;
+  box-sizing: border-box;
+  padding-inline: clamp(0px, 2vw, 24px);
+  transition: transform 240ms ease;
+}
+
+.ceo-quote__panel:hover {
+  transform: translateY(-4px);
+}
+
+.ceo-quote__text {
+  max-width: 1120px;
+  margin: 0 auto;
+  color: #142525;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: clamp(21px, 2.5vw, 34px);
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+  word-spacing: normal;
+  text-wrap: pretty;
+}
+
+.ceo-quote__word {
+  display: inline-block;
+}
+
+.ceo-quote__portrait-wrap {
+  width: 68px;
+  aspect-ratio: 1;
+  margin: 32px auto 0;
+}
+
+.ceo-quote__portrait-placeholder {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 1px solid rgba(20, 37, 37, 0.32);
+  border-radius: 4px;
+  background: rgba(11, 38, 60, 0.08);
+  color: #142525;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
+  transition:
+    transform 260ms ease,
+    border-color 260ms ease,
+    box-shadow 260ms ease;
+}
+
+.ceo-quote__portrait-placeholder:hover {
+  transform: scale(1.06);
+  border-color: rgba(20, 37, 37, 0.62);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.28);
+}
+
+.ceo-quote__portrait-placeholder span {
+  padding-inline: 3px;
+  color: rgba(20, 37, 37, 0.76);
+  font-size: 6px;
+  font-weight: 650;
+  line-height: 1.4;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.ceo-quote__identity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  margin-top: 13px;
+}
+
+.ceo-quote__identity h2 {
+  margin: 0;
+  color: #142525;
+  font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: 0;
+}
+
+.ceo-quote__identity p {
+  margin: 0;
+  color: rgba(20, 37, 37, 0.76);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+  .ceo-quote {
+    padding: 42px 20px;
+  }
+
+  .ceo-quote__panel {
+    padding-inline: 8px;
+  }
+
+  .ceo-quote__text {
+    font-size: 22px;
+    line-height: 1.45;
+  }
+
+  .ceo-quote__portrait-wrap {
+    width: 64px;
+    margin-top: 26px;
+  }
+
+  .ceo-quote__identity h2 {
+    font-size: 18px;
+  }
+
+  .ceo-quote__identity p {
+    font-size: 13px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ceo-quote__panel,
+  .ceo-quote__portrait-placeholder {
+    transition-duration: 0.01ms;
+  }
+}

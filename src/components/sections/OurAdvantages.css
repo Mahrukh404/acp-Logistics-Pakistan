@@ -1,0 +1,29 @@
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+.our-advantages {
+	width: 100vw;
+	margin-left: calc(50% - 50vw);
+}
+
+.our-advantages__heading {
+	margin: 0;
+	color: #131950;
+	font-family: 'Barlow Condensed', sans-serif;
+	font-size: clamp(88px, 10vw, 150px);
+	font-weight: 700;
+	line-height: 0.78;
+	letter-spacing: 0;
+}
+
+@media (max-width: 900px) {
+	.our-advantages__heading {
+		font-size: clamp(84px, 14vw, 124px);
+	}
+}
+
+@media (max-width: 640px) {
+	.our-advantages__heading {
+		font-size: clamp(70px, 17vw, 96px);
+	}
+}
