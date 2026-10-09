@@ -4,7 +4,7 @@ import { gsap } from '../../animations/gsap.js'
 import './CEOQuote.css'
 
 const quoteText =
-  'ACP Logistics a trusted freight forwarding and logistics company serving clients worldwide since 2005. Founded with a commitment to reliability and efficiency. We have spent over two decades helping businesses move cargo seamlessly across international borders.'
+  'acp Logistics a trusted freight forwarding and logistics company serving clients worldwide since 2005. Founded with a commitment to reliability and efficiency. We have spent over two decades helping businesses move cargo seamlessly across international borders.'
 
 const quoteWords = quoteText.split(' ')
 

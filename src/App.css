@@ -186,8 +186,7 @@
 .home-experience {
   position: relative;
   isolation: isolate;
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
+  width: 100%;
   background: #102b40;
 }
 
@@ -204,6 +203,28 @@
   object-fit: cover;
   object-position: center 50%;
   pointer-events: none;
+}
+
+.page-loading,
+.not-found {
+  display: grid;
+  min-height: 60svh;
+  place-content: center;
+  gap: 18px;
+  padding: 30px;
+  color: #152b2b;
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  text-align: center;
+}
+
+.not-found a {
+  color: #52682b;
+}
+
+.page-loading span {
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 @media (max-width: 640px) {

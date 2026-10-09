@@ -135,11 +135,11 @@ function Hero() {
             variants={heroItem}
             custom={prefersReducedMotion}
           >
-            <a className="hero-button hero-button--primary" href="#services">
+            <a className="hero-button hero-button--primary" href="/services">
               Explore Our Services
               <ArrowRight aria-hidden="true" size={17} strokeWidth={1.8} />
             </a>
-            <a className="hero-button hero-button--secondary" href="#contact">
+            <a className="hero-button hero-button--secondary" href="/contact">
               Get a Quote
               <ArrowRight aria-hidden="true" size={17} strokeWidth={1.8} />
             </a>

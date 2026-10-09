@@ -40,31 +40,32 @@ function OurAdvantages() {
       id="advantages"
       aria-labelledby="our-advantages-title"
     >
-      <div className="mx-auto grid max-w-[1600px] grid-cols-1 items-start gap-8 px-[clamp(28px,6vw,88px)] lg:grid-cols-12 lg:gap-12 max-[640px]:px-5">
-        <div
-          className="h-fit min-w-0 self-start lg:col-span-5 lg:sticky lg:top-24 lg:z-10"
-        >
+      <div className="our-advantages__layout mx-auto grid max-w-[1600px] grid-cols-1 items-start gap-8 px-[clamp(28px,6vw,88px)] lg:grid-cols-12 lg:gap-12 max-[640px]:px-5">
+        <div className="our-advantages__title-wrap h-fit min-w-0 self-start lg:col-span-5 lg:sticky lg:top-24 lg:z-10">
           <h2
-            className="our-advantages__heading m-0 flex flex-col uppercase"
+            className="section-display-heading our-advantages__heading m-0 flex flex-col uppercase"
             id="our-advantages-title"
           >
-            <span>OUR</span>
+            <span>OUR KEY</span>
             <span className="whitespace-nowrap">ADVANTAGES</span>
           </h2>
         </div>
 
-        <div className="flex min-w-0 flex-col gap-6 pb-12 lg:col-span-7 lg:gap-8 lg:pb-20 max-[640px]:gap-4">
-          {advantages.map((advantage) => (
+        <div className="our-advantages__list flex min-w-0 flex-col pb-12 lg:col-span-7 lg:pb-20">
+          {advantages.map((advantage, index) => (
             <article
-              className="grid min-h-[224px] grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] items-center gap-8 rounded-2xl bg-[#F4F5F8] px-10 py-9 max-[1100px]:gap-6 max-[1100px]:px-8 max-[900px]:min-h-[200px] max-[640px]:min-h-0 max-[640px]:grid-cols-1 max-[640px]:gap-4 max-[640px]:px-6 max-[640px]:py-7"
+              className="our-advantages__card"
               key={advantage.title}
             >
-              <h3 className="m-0 max-w-[18ch] font-sans text-[clamp(18px,2vw,24px)] font-bold uppercase leading-tight text-[#131950]">
-                {advantage.title}
-              </h3>
-              <p className="m-0 max-w-[38ch] justify-self-end text-right font-sans text-base leading-7 text-[#131950] max-[640px]:justify-self-stretch max-[640px]:text-left">
-                {advantage.description}
-              </p>
+              <span className="our-advantages__number" aria-hidden="true">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <div className="our-advantages__copy">
+                <h3 className="our-advantages__card-title">{advantage.title}</h3>
+                <p className="our-advantages__description">
+                  {advantage.description}
+                </p>
+              </div>
             </article>
           ))}
         </div>

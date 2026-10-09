@@ -1,12 +1,11 @@
 .company-intro {
   box-sizing: border-box;
   display: flex;
-  width: 100vw;
+  width: 100%;
   min-height: 100svh;
   align-items: center;
   justify-content: center;
-  padding: clamp(52px, 8vh, 96px) clamp(20px, 5vw, 76px);
-  margin-left: calc(50% - 50vw);
+  padding: clamp(52px, 8vh, 96px) clamp(16px, 3vw, 44px);
   background: transparent;
   color: #f4f6f3;
   font-family: 'DM Sans', 'Segoe UI', sans-serif;
@@ -14,16 +13,16 @@
 }
 
 .company-intro__panel-motion {
-  width: min(100%, 1520px);
+  width: min(100%, 1380px);
 }
 
 .company-intro__panel {
   box-sizing: border-box;
   display: flex;
-  min-height: clamp(520px, 70vh, 760px);
+  min-height: clamp(560px, 74svh, 780px);
   flex-direction: column;
   overflow: hidden;
-  padding: clamp(28px, 3.8vw, 54px) clamp(24px, 5.2vw, 76px) 0;
+  padding: clamp(36px, 4vw, 58px) clamp(24px, 5.2vw, 76px) 0;
   border: 1px solid rgba(228, 237, 238, 0.11);
   border-radius: 16px;
   background: #0b263c;
@@ -76,24 +75,25 @@
 }
 
 .company-intro__body {
-  display: grid;
+  display: flex;
   flex: 1;
-  grid-template-columns: minmax(0, 1.18fr) minmax(280px, 0.72fr);
-  align-items: end;
-  gap: clamp(48px, 8vw, 124px);
-  padding-block: clamp(70px, 10vh, 116px) clamp(64px, 8vh, 94px);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(22px, 3vh, 34px);
+  padding-block: clamp(56px, 8vh, 96px);
+  text-align: center;
 }
 
 .company-intro__title {
-  max-width: 850px;
+  max-width: 100%;
   margin: 0;
   color: #f4f6f3;
   font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
-  font-size: clamp(88px, 11vw, 158px);
+  font-size: clamp(76px, 9.5vw, 132px);
   font-weight: 600;
   line-height: 0.82;
   letter-spacing: 0;
-  overflow-wrap: anywhere;
   transition: transform 240ms ease;
 }
 
@@ -102,12 +102,13 @@
 }
 
 .company-intro__description {
-  max-width: 510px;
-  padding-bottom: 8px;
+  width: min(100%, 680px);
 }
 
 .company-intro__description p {
+  max-width: 62ch;
   margin: 0;
+  margin-inline: auto;
   color: rgba(236, 242, 242, 0.76);
   font-size: 16px;
   line-height: 1.8;
@@ -196,15 +197,6 @@
   .company-intro {
     padding-inline: 36px;
   }
-
-  .company-intro__panel {
-    min-height: 620px;
-  }
-
-  .company-intro__body {
-    grid-template-columns: minmax(0, 1fr) minmax(230px, 0.8fr);
-    gap: 44px;
-  }
 }
 
 @media (max-width: 640px) {
@@ -214,7 +206,7 @@
   }
 
   .company-intro__panel {
-    min-height: min(720px, calc(100svh - 106px));
+    min-height: 0;
     padding: 27px 23px 0;
     border-radius: 12px;
   }
@@ -238,20 +230,17 @@
   }
 
   .company-intro__body {
-    grid-template-columns: 1fr;
-    align-items: start;
-    gap: 32px;
+    gap: 26px;
     padding-block: 72px 58px;
   }
 
   .company-intro__title {
-    max-width: 460px;
-    font-size: clamp(76px, 19vw, 116px);
+    font-size: clamp(64px, 16vw, 92px);
     line-height: 0.84;
   }
 
   .company-intro__description {
-    max-width: 480px;
+    width: 100%;
   }
 
   .company-intro__description p {
@@ -261,7 +250,7 @@
 
   .company-intro__cta {
     min-height: 46px;
-    margin-top: 24px;
+    margin-top: 26px;
   }
 
   .company-intro__marquee {

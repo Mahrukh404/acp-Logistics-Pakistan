@@ -4,10 +4,10 @@ import { ArrowUpRight, Menu, X } from 'lucide-react'
 import './Header.css'
 
 const navigationLinks = [
-  { label: 'Home', href: '#home' },
-  { label: 'About', href: '#about' },
-  { label: 'Services', href: '#services' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Home', href: '/' },
+  { label: 'About', href: '/#about' },
+  { label: 'Services', href: '/services' },
+  { label: 'Contact', href: '/contact' },
 ]
 
 function Header() {
@@ -50,7 +50,7 @@ function Header() {
       <div className="site-header__inner">
         <a
           className="site-brand"
-          href="#home"
+          href="/"
           aria-label="ACP Logistics Pakistan home"
           onClick={closeMenu}
         >
@@ -83,7 +83,7 @@ function Header() {
         </nav>
 
         <div className="site-header__actions">
-          <a className="quote-button" href="#contact">
+          <a className="quote-button" href="/contact">
             <span>Get a Quote</span>
             <ArrowUpRight aria-hidden="true" size={16} strokeWidth={1.8} />
           </a>
@@ -141,7 +141,7 @@ function Header() {
               </motion.a>
             ))}
 
-            <a className="mobile-navigation__quote" href="#contact" onClick={closeMenu}>
+            <a className="mobile-navigation__quote" href="/contact" onClick={closeMenu}>
               Get a Quote
               <ArrowUpRight aria-hidden="true" size={17} strokeWidth={1.8} />
             </a>

@@ -1,10 +1,11 @@
 .site-footer {
+  --footer-inline-padding: clamp(28px, 6vw, 88px);
   position: relative;
   z-index: 1;
   box-sizing: border-box;
-  width: 100vw;
-  padding: 78px clamp(28px, 6vw, 88px) 22px;
-  margin-left: calc(50% - 50vw);
+  width: 100%;
+  padding: 78px var(--footer-inline-padding) 22px;
+  overflow-x: clip;
   background: #0b263c;
   color: #f4f6f3;
   font-family: 'DM Sans', 'Segoe UI', sans-serif;
@@ -116,6 +117,9 @@
 }
 
 .site-footer__bottom {
+  width: min(100%, 1440px);
+  box-sizing: border-box;
+  margin-inline: auto;
   padding-top: 18px;
   border-top: 1px solid rgba(244, 246, 243, 0.18);
 }
@@ -128,10 +132,10 @@
 }
 
 .site-footer__signature {
-  width: 100vw;
+  width: auto;
   overflow: hidden;
   padding-block: 24px 30px;
-  margin: 22px 0 0 calc(50% - 50vw);
+  margin: 22px calc(var(--footer-inline-padding) * -1) 0;
 }
 
 .site-footer__signature-track,
@@ -227,7 +231,8 @@
 
 @media (max-width: 560px) {
   .site-footer {
-    padding: 58px 22px 20px;
+    --footer-inline-padding: 22px;
+    padding: 58px var(--footer-inline-padding) 20px;
   }
 
   .site-footer__columns {

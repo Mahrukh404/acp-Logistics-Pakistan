@@ -19,7 +19,7 @@ function CompanyIntro() {
           panelRef.current,
           {
             y: () => (window.innerWidth <= 640 ? 52 : 92),
-            scale: 0.985,
+            scale: () => (window.innerWidth <= 640 ? 0.95 : 0.92),
           },
           {
             y: 0,
@@ -51,7 +51,7 @@ function CompanyIntro() {
         <div className="company-intro__panel">
           <div className="company-intro__topbar">
             <span className="company-intro__eyebrow">ABOUT US</span>
-            <span className="company-intro__brand">ACP LOGISTICS PAKISTAN</span>
+            <span className="company-intro__brand">acp LOGISTICS PAKISTAN</span>
           </div>
 
           <div className="company-intro__divider" aria-hidden="true" />
@@ -68,25 +68,25 @@ function CompanyIntro() {
                 helping cargo move efficiently, safely, and reliably across
                 international borders.
               </p>
-              <a className="company-intro__cta" href="#contact">
+              <a className="company-intro__cta" href="/contact">
                 <span>LEARN MORE</span>
-                <ArrowUpRight aria-hidden="true" size={17} strokeWidth={1.7} />
+                <ArrowUpRight aria-hidden="true" size={17} strokeWidth={2.7} />
               </a>
             </div>
           </div>
 
-          <div className="company-intro__marquee" aria-label="Working since 2005">
+          <div className="company-intro__marquee" aria-label=" since 2005">
             <div className="company-intro__marquee-track" aria-hidden="true">
               <div className="company-intro__marquee-group">
-                <span>WORKING SINCE 2005</span>
+                <span> SINCE 2005</span>
                 <span className="company-intro__marquee-dot" />
-                <span>WORKING SINCE 2005</span>
+                <span> SINCE 2005</span>
                 <span className="company-intro__marquee-dot" />
               </div>
               <div className="company-intro__marquee-group">
-                <span>WORKING SINCE 2005</span>
+                <span> SINCE 2005</span>
                 <span className="company-intro__marquee-dot" />
-                <span>WORKING SINCE 2005</span>
+                <span> SINCE 2005</span>
                 <span className="company-intro__marquee-dot" />
               </div>
             </div>

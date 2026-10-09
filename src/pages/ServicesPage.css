@@ -1,0 +1,298 @@
+.services-page {
+  --services-ink: #152b2b;
+  --services-muted: #657270;
+  --services-paper: #f4f6f3;
+  --services-lime: #d9ed83;
+  background: var(--services-paper);
+  color: var(--services-ink);
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  text-align: left;
+}
+
+.services-page__intro {
+  box-sizing: border-box;
+  display: flex;
+  min-height: min(760px, 88svh);
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 150px clamp(24px, 10vw, 150px) 90px;
+  background: #0b263c;
+  color: #f4f6f3;
+}
+
+.services-page__eyebrow {
+  margin: 0;
+  color: #b9d25e;
+  font-size: 10px;
+  font-weight: 650;
+  line-height: 1.5;
+  letter-spacing: 0.15em;
+}
+
+.services-page__intro h1 {
+  max-width: 1000px;
+  margin: 27px 0 0;
+  color: #f4f6f3;
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: clamp(48px, 8.2vw, 112px);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.services-page__lead {
+  max-width: 540px;
+  margin: 24px 0 0;
+  color: rgba(244, 246, 243, 0.76);
+  font-size: clamp(15px, 1.4vw, 18px);
+  line-height: 1.75;
+}
+
+.services-page__scroll {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  gap: 14px;
+  margin-top: 36px;
+  color: var(--services-lime);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.services-page__list {
+  padding: 28px clamp(20px, 6.5vw, 96px) 0;
+}
+
+.service-feature {
+  display: grid;
+  min-height: 630px;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  align-items: center;
+  gap: clamp(38px, 7vw, 104px);
+  padding-block: clamp(68px, 9vw, 132px);
+  border-bottom: 1px solid rgba(21, 43, 43, 0.14);
+}
+
+.service-feature--reverse .service-feature__image-wrap {
+  order: 2;
+}
+
+.service-feature__image-wrap {
+  position: relative;
+  min-width: 0;
+  height: clamp(390px, 47vw, 600px);
+  overflow: hidden;
+  background: #dce2dd;
+}
+
+.service-feature__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.service-feature__image-number {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  padding: 8px 10px;
+  background: rgba(11, 38, 60, 0.82);
+  color: #f4f6f3;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
+.service-feature__copy {
+  max-width: 540px;
+  padding-block: 20px;
+}
+
+.service-feature__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 0 0 24px;
+  color: var(--services-muted);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+}
+
+.service-feature__eyebrow span:first-child {
+  color: #70873c;
+  font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  font-size: 30px;
+  letter-spacing: 0;
+}
+
+.service-feature__copy h2 {
+  margin: 0;
+  color: var(--services-ink);
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: clamp(42px, 5.4vw, 76px);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.service-feature__description {
+  max-width: 430px;
+  margin: 22px 0 0;
+  color: #53615f;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.service-feature__cta,
+.services-page__closing a {
+  display: inline-flex;
+  min-height: 52px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 30px;
+  padding: 0 17px;
+  border: 1px solid var(--services-ink);
+  color: var(--services-ink);
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.09em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition:
+    color 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.service-feature__cta:hover,
+.services-page__closing a:hover {
+  transform: translateY(-2px);
+  border-color: var(--services-ink);
+  background: var(--services-ink);
+  color: #fff;
+}
+
+.service-feature__cta:focus-visible,
+.services-page__scroll:focus-visible,
+.services-page__closing a:focus-visible {
+  outline: 2px solid #748c37;
+  outline-offset: 4px;
+}
+
+.services-page__closing {
+  display: flex;
+  min-height: 400px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 72px 24px;
+  background: #dfe7d0;
+  text-align: center;
+}
+
+.services-page__closing h2 {
+  margin: 16px 0 0;
+  color: var(--services-ink);
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 400;
+  line-height: 1.04;
+}
+
+.services-page__closing a {
+  border-color: var(--services-ink);
+  background: var(--services-ink);
+  color: #fff;
+}
+
+.services-page__closing a:hover {
+  border-color: #294441;
+  background: #294441;
+}
+
+@media (max-width: 760px) {
+  .services-page__intro {
+    min-height: 660px;
+    min-height: min(700px, 88svh);
+    padding: 132px 24px 72px;
+  }
+
+  .services-page__intro h1 {
+    max-width: 620px;
+    font-size: clamp(48px, 11vw, 76px);
+  }
+
+  .services-page__list {
+    padding: 0 20px;
+  }
+
+  .service-feature,
+  .service-feature--reverse {
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+    padding-block: 52px;
+  }
+
+  .service-feature--reverse .service-feature__image-wrap {
+    order: 0;
+  }
+
+  .service-feature__image-wrap {
+    height: clamp(280px, 75vw, 480px);
+  }
+
+  .service-feature__copy {
+    max-width: none;
+    padding-block: 0;
+  }
+
+  .service-feature__copy h2 {
+    font-size: clamp(42px, 10vw, 64px);
+  }
+
+  .service-feature__description {
+    margin-top: 16px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 380px) {
+  .services-page__intro {
+    padding-inline: 20px;
+  }
+
+  .services-page__intro h1 {
+    font-size: 46px;
+  }
+
+  .services-page__list {
+    padding-inline: 16px;
+  }
+
+  .service-feature {
+    padding-block: 42px;
+  }
+
+  .service-feature__eyebrow {
+    gap: 10px;
+    font-size: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .service-feature__cta,
+  .services-page__closing a {
+    transition-duration: 0.01ms;
+  }
+}

@@ -8,42 +8,10 @@ import {
 import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react'
 import { A11y, EffectFade, Keyboard } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
+import services from '../../data/services.js'
 import 'swiper/css'
 import 'swiper/css/effect-fade'
 import './ServicesIntro.css'
-
-const services = [
-  {
-    title: 'Global Sea Logistics',
-    image: '/images/sea_optimized.jpg',
-    description:
-      'Cost-effective and scalable sea freight solutions for large and bulk shipments.',
-  },
-  {
-    title: 'Express Air Cargo',
-    image: '/images/air_optimized.jpg',
-    description:
-      'Fast and reliable air freight services connecting your business to global markets.',
-  },
-  {
-    title: 'Machinery Imports',
-    image: '/images/machinery-import_optimized.jpg',
-    description:
-      'Reliable import solutions for industrial machinery, heavy equipment, and specialized cargo.',
-  },
-  {
-    title: 'Warehousing',
-    image: '/images/warehouse_optimized.jpg',
-    description:
-      'Secure warehousing and organized cargo storage to support your supply chain.',
-  },
-  {
-    title: 'Customs Clearance',
-    image: '/images/customer-clearance_optimized.jpg',
-    description:
-      'Efficient customs documentation and clearance support for smooth international shipments.',
-  },
-]
 
 const copyVariants = {
   enter: ({ direction, reduceMotion }) => ({
@@ -97,11 +65,10 @@ function ServicesIntro() {
   return (
     <div className="services-layout" id="services">
       <aside className="services-layout__label-box">
-        <motion.span
+        <motion.h2
           ref={serviceLabelRef}
-          className="services-layout__label"
-          role="heading"
-          aria-level={2}
+          className="section-display-heading services-layout__label"
+          id="services-heading"
           initial={prefersReducedMotion ? false : { opacity: 0, y: 14 }}
           animate={
             prefersReducedMotion || serviceLabelInView
@@ -114,11 +81,12 @@ function ServicesIntro() {
             ease: 'easeOut',
           }}
         >
-          OUR SERVICES
-        </motion.span>
+          <span>OUR</span>
+          <span>SERVICES</span>
+        </motion.h2>
       </aside>
 
-      <section className="services-intro" aria-label="ACP Logistics services">
+      <section className="services-intro" aria-labelledby="services-heading">
         <Swiper
         className="services-intro__swiper"
         modules={[A11y, EffectFade, Keyboard]}
@@ -190,10 +158,10 @@ function ServicesIntro() {
             </p>
             <a
               className="services-intro__cta"
-              href="#about"
-              aria-label={`Explore ${activeService.title}`}
+              href={`/contact?service=${encodeURIComponent(activeService.title)}`}
+              aria-label={`Enquire about ${activeService.title}`}
             >
-              <span>Explore Service</span>
+              <span>Enquire About This Service</span>
               <ArrowUpRight aria-hidden="true" size={18} strokeWidth={1.7} />
             </a>
           </motion.div>

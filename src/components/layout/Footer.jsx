@@ -4,10 +4,10 @@ import { motion, useInView, useReducedMotion } from 'motion/react'
 import './Footer.css'
 
 const footerLinks = [
-  { label: 'Home', href: '#home' },
-  { label: 'About', href: '#about' },
-  { label: 'Services', href: '#services' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Home', href: '/' },
+  { label: 'About', href: '/#about' },
+  { label: 'Services', href: '/services' },
+  { label: 'Contact', href: '/contact' },
 ]
 
 function Footer() {
@@ -18,7 +18,6 @@ function Footer() {
   return (
     <footer
       className="site-footer"
-      id="contact"
       ref={footerRef}
       aria-labelledby="site-footer-title"
     >
@@ -39,7 +38,7 @@ function Footer() {
           <div className="site-footer__brand-column">
             <a
               className="site-footer__brand"
-              href="#home"
+              href="/"
               id="site-footer-title"
               aria-label="ACP Logistics home"
             >
@@ -79,39 +78,39 @@ function Footer() {
             </p>
           </address>
         </div>
-
-        <div
-          className="site-footer__signature"
-          role="group"
-          aria-label="Start your Journey with acp Logistics Today."
-        >
-          <div className="site-footer__signature-track" aria-hidden="true">
-            {[0, 1].map((copy) => (
-              <div className="site-footer__signature-group" key={copy}>
-                <span className="site-footer__signature-lockup">
-                  {[0, 1, 2, 3, 4].map((layer) => (
-                    <span
-                      className={`site-footer__signature-line site-footer__signature-line--${layer}`}
-                      key={layer}
-                    >
-                      <span>Start your Journey with</span>
-                      <strong>acp</strong>
-                      <span className="site-footer__signature-light">
-                        Logistics
-                      </span>
-                      <span>Today.</span>
-                    </span>
-                  ))}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="site-footer__bottom">
-          <p>Property of ACP Logistics LTD</p>
-        </div>
       </motion.div>
+
+      <div
+        className="site-footer__signature"
+        role="group"
+        aria-label="Start your Journey with acp Logistics Today."
+      >
+        <div className="site-footer__signature-track" aria-hidden="true">
+          {[0, 1].map((copy) => (
+            <div className="site-footer__signature-group" key={copy}>
+              <span className="site-footer__signature-lockup">
+                {[0, 1, 2, 3, 4].map((layer) => (
+                  <span
+                    className={`site-footer__signature-line site-footer__signature-line--${layer}`}
+                    key={layer}
+                  >
+                    <span>Start your Journey with</span>
+                    <strong>acp</strong>
+                    <span className="site-footer__signature-light">
+                      Logistics
+                    </span>
+                    <span>Today.</span>
+                  </span>
+                ))}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="site-footer__bottom">
+        <p>Property of ACP Logistics LTD</p>
+      </div>
     </footer>
   )
 }
