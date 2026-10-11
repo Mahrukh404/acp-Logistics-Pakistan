@@ -68,7 +68,16 @@ function CompanyIntro() {
                 helping cargo move efficiently, safely, and reliably across
                 international borders.
               </p>
-              <a className="company-intro__cta" href="/contact">
+              <a
+                className="company-intro__cta"
+                href="/about"
+                onClick={(e) => {
+                  e.preventDefault()
+                  window.history.pushState(null, '', '/about')
+                  window.dispatchEvent(new Event('popstate'))
+                  window.scrollTo(0, 0)
+                }}
+              >
                 <span>LEARN MORE</span>
                 <ArrowUpRight aria-hidden="true" size={17} strokeWidth={2.7} />
               </a>

@@ -5,7 +5,7 @@ import './Header.css'
 
 const navigationLinks = [
   { label: 'Home', href: '/' },
-  { label: 'About', href: '/#about' },
+  { label: 'About', href: '/about' },
   { label: 'Services', href: '/services' },
   { label: 'Contact', href: '/contact' },
 ]
@@ -41,6 +41,17 @@ function Header() {
   }, [isMenuOpen])
 
   const closeMenu = () => setIsMenuOpen(false)
+
+  const handleNavClick = (event, href) => {
+    closeMenu()
+    if (href.startsWith('/') && !href.startsWith('//') && !href.includes('#')) {
+      event.preventDefault()
+      window.history.pushState(null, '', href)
+      window.dispatchEvent(new Event('popstate'))
+      window.scrollTo(0, 0)
+    }
+  }
+
   const menuTransition = prefersReducedMotion
     ? { duration: 0 }
     : { duration: 0.24, ease: [0.22, 0.68, 0, 1] }
@@ -52,7 +63,7 @@ function Header() {
           className="site-brand"
           href="/"
           aria-label="ACP Logistics Pakistan home"
-          onClick={closeMenu}
+          onClick={(e) => handleNavClick(e, '/')}
         >
           <img
             className="site-brand__logo"
@@ -69,6 +80,7 @@ function Header() {
               href={href}
               key={label}
               aria-label={label}
+              onClick={(e) => handleNavClick(e, href)}
             >
               <span className="navigation-hover-label" aria-hidden="true">
                 <span className="navigation-hover-label__inner">
@@ -83,7 +95,11 @@ function Header() {
         </nav>
 
         <div className="site-header__actions">
-          <a className="quote-button" href="/contact">
+          <a
+            className="quote-button"
+            href="/contact"
+            onClick={(e) => handleNavClick(e, '/contact')}
+          >
             <span>Get a Quote</span>
             <ArrowUpRight aria-hidden="true" size={16} strokeWidth={1.8} />
           </a>
@@ -121,7 +137,7 @@ function Header() {
                 className="mobile-navigation__link"
                 href={href}
                 key={label}
-                onClick={closeMenu}
+                onClick={(e) => handleNavClick(e, href)}
                 aria-label={label}
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -141,7 +157,11 @@ function Header() {
               </motion.a>
             ))}
 
-            <a className="mobile-navigation__quote" href="/contact" onClick={closeMenu}>
+            <a
+              className="mobile-navigation__quote"
+              href="/contact"
+              onClick={(e) => handleNavClick(e, '/contact')}
+            >
               Get a Quote
               <ArrowUpRight aria-hidden="true" size={17} strokeWidth={1.8} />
             </a>

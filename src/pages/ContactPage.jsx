@@ -1,5 +1,14 @@
 import { useState } from 'react'
-import { ArrowUpRight, LoaderCircle, Mail, MapPin, Phone } from 'lucide-react'
+import {
+  ArrowUpRight,
+  Clock,
+  LoaderCircle,
+  Mail,
+  MapPin,
+  Phone,
+  ShieldCheck,
+  Sparkles,
+} from 'lucide-react'
 import { motion, useReducedMotion } from 'motion/react'
 import services from '../data/services.js'
 import './ContactPage.css'
@@ -15,6 +24,26 @@ function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [status, setStatus] = useState(null)
   const prefersReducedMotion = useReducedMotion()
+
+  // 3D Card Hover Perspective Handler
+  const handleCardMouseMove = (e) => {
+    if (prefersReducedMotion) return
+    const card = e.currentTarget
+    const rect = card.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    const centerX = rect.width / 2
+    const centerY = rect.height / 2
+    const rotateX = ((y - centerY) / centerY) * -5
+    const rotateY = ((x - centerX) / centerX) * 5
+
+    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`
+  }
+
+  const handleCardMouseLeave = (e) => {
+    const card = e.currentTarget
+    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)'
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -91,81 +120,153 @@ function ContactPage() {
 
   return (
     <main className="contact-page">
+      {/* Background ambient lighting accents */}
+      <div className="contact-page__ambient" aria-hidden="true">
+        <div className="contact-page__ambient-orb contact-page__ambient-orb--1" />
+        <div className="contact-page__ambient-orb contact-page__ambient-orb--2" />
+      </div>
+
       <motion.header
         className="contact-page__intro"
-        initial={prefersReducedMotion ? false : { opacity: 0, y: 18 }}
+        initial={prefersReducedMotion ? false : { opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: prefersReducedMotion ? 0 : 0.65 }}
+        transition={{ duration: prefersReducedMotion ? 0 : 0.75, ease: [0.16, 1, 0.3, 1] }}
       >
-        <p className="contact-page__eyebrow">ACP LOGISTICS / CONTACT</p>
+        <div className="contact-page__badge">
+          <Sparkles size={13} aria-hidden="true" />
+          <span>ACP LOGISTICS / CONTACT</span>
+        </div>
         <h1>Let’s discuss your logistics needs.</h1>
-        <p>
-          Tell us what you’re moving and how we can help. Our team will be in
-          touch to discuss the right next step for your business.
+        <p className="contact-page__intro-lead">
+          Tell us what you’re moving and how we can help. Our team coordinates across international
+          borders to deliver dependable, tailored freight solutions for your business.
         </p>
       </motion.header>
 
       <div className="contact-page__content">
         <aside className="contact-details" aria-labelledby="contact-details-title">
-          <div>
+          <motion.div
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
             <p className="contact-page__eyebrow">HERE TO HELP</p>
             <h2 id="contact-details-title">Talk to our team</h2>
             <p className="contact-details__intro">
               Reach out directly or send us a message using the form. We look
-              forward to hearing from you.
+              forward to discussing your freight requirements and providing practical solutions.
             </p>
-          </div>
+          </motion.div>
 
           <address className="contact-details__list">
-            <a href="mailto:Awan@acplogs.com">
-              <span className="contact-details__icon">
-                <Mail aria-hidden="true" size={18} />
-              </span>
-              <span>
-                <span className="contact-details__label">Email</span>
+            <motion.a
+              href="mailto:Awan@acplogs.com"
+              className="contact-card contact-card--interactive"
+              onMouseMove={handleCardMouseMove}
+              onMouseLeave={handleCardMouseLeave}
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.18 }}
+            >
+              <div className="contact-details__icon">
+                <Mail aria-hidden="true" size={20} />
+              </div>
+              <div className="contact-card__info">
+                <span className="contact-details__label">Email Us</span>
                 <span className="contact-details__value">Awan@acplogs.com</span>
-              </span>
-              <ArrowUpRight aria-hidden="true" size={16} />
-            </a>
-            <a href="tel:+92418738133">
-              <span className="contact-details__icon">
-                <Phone aria-hidden="true" size={18} />
-              </span>
-              <span>
-                <span className="contact-details__label">Phone</span>
+              </div>
+              <div className="contact-card__arrow">
+                <ArrowUpRight aria-hidden="true" size={17} />
+              </div>
+            </motion.a>
+
+            <motion.a
+              href="tel:+92418738133"
+              className="contact-card contact-card--interactive"
+              onMouseMove={handleCardMouseMove}
+              onMouseLeave={handleCardMouseLeave}
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.26 }}
+            >
+              <div className="contact-details__icon">
+                <Phone aria-hidden="true" size={20} />
+              </div>
+              <div className="contact-card__info">
+                <span className="contact-details__label">Call Direct</span>
                 <span className="contact-details__value">+92-41-8738133</span>
-              </span>
-              <ArrowUpRight aria-hidden="true" size={16} />
-            </a>
-            <div className="contact-details__address">
-              <span className="contact-details__icon">
-                <MapPin aria-hidden="true" size={18} />
-              </span>
-              <span>
-                <span className="contact-details__label">Office</span>
+              </div>
+              <div className="contact-card__arrow">
+                <ArrowUpRight aria-hidden="true" size={17} />
+              </div>
+            </motion.a>
+
+            <motion.div
+              className="contact-card contact-card--static"
+              onMouseMove={handleCardMouseMove}
+              onMouseLeave={handleCardMouseLeave}
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.34 }}
+            >
+              <div className="contact-details__icon">
+                <MapPin aria-hidden="true" size={20} />
+              </div>
+              <div className="contact-card__info">
+                <span className="contact-details__label">Headquarters</span>
                 <span className="contact-details__value">
                   P-31, Chenab Market, Madina Town, Faisalabad, Punjab, Pakistan
                 </span>
-              </span>
-            </div>
+              </div>
+            </motion.div>
           </address>
+
+          {/* Dedicated Assurance Card */}
+          <div className="contact-assurance-card">
+            <div className="contact-assurance-card__icon">
+              <ShieldCheck size={20} aria-hidden="true" />
+            </div>
+            <div className="contact-assurance-card__body">
+              <strong>Reliable Response Guaranteed</strong>
+              <p>
+                Our logistics coordinators monitor enquiries continuously across global time zones.
+              </p>
+            </div>
+          </div>
         </aside>
 
-        <section className="contact-form-panel" aria-labelledby="contact-form-title">
+        <motion.section
+          className="contact-form-panel"
+          aria-labelledby="contact-form-title"
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.75, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+          onMouseMove={handleCardMouseMove}
+          onMouseLeave={handleCardMouseLeave}
+        >
+          {/* Subtle top accent glowing line */}
+          <div className="contact-form-panel__top-accent" aria-hidden="true" />
+
           <div className="contact-form-panel__heading">
             <p className="contact-page__eyebrow">START A CONVERSATION</p>
             <h2 id="contact-form-title">Send us an enquiry</h2>
+            <p className="contact-form-panel__subtitle">
+              Fill out your shipping parameters below and our freight specialists will reach out promptly.
+            </p>
           </div>
 
-          <form className="contact-form" onSubmit={handleSubmit}>
+          <form className="contact-form" onSubmit={handleSubmit} noValidate>
             <div className="contact-form__row">
               <div className="contact-form__field">
-                <label htmlFor="contact-full-name">Full Name <span aria-hidden="true">*</span></label>
+                <label htmlFor="contact-full-name">
+                  Full Name <span aria-hidden="true">*</span>
+                </label>
                 <input
                   id="contact-full-name"
                   name="fullName"
                   type="text"
                   autoComplete="name"
+                  placeholder="e.g. Tariq Awan"
                   minLength={2}
                   maxLength={100}
                   required
@@ -173,12 +274,15 @@ function ContactPage() {
                 />
               </div>
               <div className="contact-form__field">
-                <label htmlFor="contact-email">Email Address <span aria-hidden="true">*</span></label>
+                <label htmlFor="contact-email">
+                  Email Address <span aria-hidden="true">*</span>
+                </label>
                 <input
                   id="contact-email"
                   name="email"
                   type="email"
                   autoComplete="email"
+                  placeholder="name@company.com"
                   maxLength={254}
                   required
                 />
@@ -193,7 +297,7 @@ function ContactPage() {
                 value={service}
                 onChange={(event) => setService(event.target.value)}
               >
-                <option value="">General enquiry</option>
+                <option value="">General Logistics Enquiry</option>
                 {services.map((item) => (
                   <option value={item.title} key={item.title}>
                     {item.title}
@@ -203,21 +307,27 @@ function ContactPage() {
             </div>
 
             <div className="contact-form__field">
-              <label htmlFor="contact-subject">Subject <span>(optional)</span></label>
+              <label htmlFor="contact-subject">
+                Subject <span>(optional)</span>
+              </label>
               <input
                 id="contact-subject"
                 name="subject"
                 type="text"
+                placeholder="e.g. Sea freight quotation to Europe"
                 maxLength={180}
               />
             </div>
 
             <div className="contact-form__field">
-              <label htmlFor="contact-message">Message <span aria-hidden="true">*</span></label>
+              <label htmlFor="contact-message">
+                Message <span aria-hidden="true">*</span>
+              </label>
               <textarea
                 id="contact-message"
                 name="message"
                 rows="5"
+                placeholder="Describe your cargo, origin, destination, and timeline requirements..."
                 minLength={10}
                 maxLength={5000}
                 required
@@ -237,41 +347,44 @@ function ContactPage() {
             </div>
 
             {status && (
-              <p
+              <div
                 className={`contact-form__status contact-form__status--${status.type}`}
                 role={status.type === 'error' ? 'alert' : 'status'}
                 aria-live={status.type === 'error' ? 'assertive' : 'polite'}
               >
                 {status.message}
-              </p>
+              </div>
             )}
 
-            <button
-              className="contact-form__submit"
-              type="submit"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? (
-                <>
-                  <LoaderCircle
-                    className="contact-form__spinner"
-                    aria-hidden="true"
-                    size={17}
-                  />
-                  Sending…
-                </>
-              ) : (
-                <>
-                  Send Message
-                  <ArrowUpRight aria-hidden="true" size={18} />
-                </>
-              )}
-            </button>
-            <p className="contact-form__required-note">
-              Fields marked with * are required.
-            </p>
+            <div className="contact-form__footer-row">
+              <button
+                className="contact-form__submit"
+                type="submit"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  <>
+                    <LoaderCircle
+                      className="contact-form__spinner"
+                      aria-hidden="true"
+                      size={17}
+                    />
+                    <span>Sending Enquiry…</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Send Message</span>
+                    <ArrowUpRight aria-hidden="true" size={17} />
+                  </>
+                )}
+              </button>
+
+              <span className="contact-form__required-note">
+                Fields marked with <em>*</em> are required.
+              </span>
+            </div>
           </form>
-        </section>
+        </motion.section>
       </div>
     </main>
   )

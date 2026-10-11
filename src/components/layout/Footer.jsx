@@ -1,13 +1,13 @@
 import { useRef } from 'react'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, Mail, MapPin, Phone } from 'lucide-react'
 import { motion, useInView, useReducedMotion } from 'motion/react'
 import './Footer.css'
 
 const footerLinks = [
   { label: 'Home', href: '/' },
-  { label: 'About', href: '/#about' },
-  { label: 'Services', href: '/services' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'About Us', href: '/about' },
+  { label: 'Our Services', href: '/services' },
+  { label: 'Contact Us', href: '/contact' },
 ]
 
 function Footer() {
@@ -15,71 +15,144 @@ function Footer() {
   const isInView = useInView(footerRef, { once: true, amount: 0.12 })
   const prefersReducedMotion = useReducedMotion()
 
+  const handleNavClick = (event, href) => {
+    if (href.startsWith('/') && !href.startsWith('//') && !href.includes('#')) {
+      event.preventDefault()
+      window.history.pushState(null, '', href)
+      window.dispatchEvent(new Event('popstate'))
+      window.scrollTo(0, 0)
+    }
+  }
+
+  // Motion variants for smooth staggered column entrance
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: prefersReducedMotion ? 0 : 0.12,
+        delayChildren: 0.08,
+      },
+    },
+  }
+
+  const columnVariants = {
+    hidden: { opacity: 0, y: 22 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: prefersReducedMotion ? 0 : 0.75,
+        ease: [0.16, 1, 0.3, 1],
+      },
+    },
+  }
+
   return (
     <footer
       className="site-footer"
       ref={footerRef}
       aria-labelledby="site-footer-title"
     >
+      {/* Top luminous decorative accent border */}
+      <div className="site-footer__top-accent" aria-hidden="true" />
+
       <motion.div
         className="site-footer__inner"
-        initial={prefersReducedMotion ? false : { opacity: 0, y: 18 }}
-        animate={
-          prefersReducedMotion || isInView
-            ? { opacity: 1, y: 0 }
-            : { opacity: 0, y: 18 }
-        }
-        transition={{
-          duration: prefersReducedMotion ? 0 : 0.9,
-          ease: [0.22, 0.68, 0, 1],
-        }}
+        variants={containerVariants}
+        initial="hidden"
+        animate={prefersReducedMotion || isInView ? 'visible' : 'hidden'}
       >
         <div className="site-footer__columns">
-          <div className="site-footer__brand-column">
+          {/* Column 1: Clean ACP Brand Logo (No extra text or green box) */}
+          <motion.div className="site-footer__brand-column" variants={columnVariants}>
             <a
               className="site-footer__brand"
               href="/"
               id="site-footer-title"
               aria-label="ACP Logistics home"
+              onClick={(e) => handleNavClick(e, '/')}
             >
               <img
                 className="site-footer__logo"
                 src="/images/logo-transparent.png"
-                alt=""
+                alt="ACP Logistics Pakistan"
                 draggable="false"
               />
             </a>
-          </div>
+          </motion.div>
 
-          <nav className="site-footer__navigation" aria-label="Footer navigation">
-            <h2 className="site-footer__heading">Explore</h2>
+          {/* Column 2: Navigation Links */}
+          <motion.nav
+            className="site-footer__navigation"
+            aria-label="Footer navigation"
+            variants={columnVariants}
+          >
+            <h2 className="site-footer__heading">Navigation</h2>
             <ul>
               {footerLinks.map(({ label, href }) => (
                 <li key={label}>
-                  <a href={href}>
+                  <a
+                    href={href}
+                    onClick={(e) => handleNavClick(e, href)}
+                    className="site-footer__nav-link"
+                  >
                     <span>{label}</span>
-                    <ArrowUpRight aria-hidden="true" size={14} strokeWidth={1.7} />
+                    <ArrowUpRight
+                      className="site-footer__nav-arrow"
+                      aria-hidden="true"
+                      size={14}
+                      strokeWidth={2}
+                    />
                   </a>
                 </li>
               ))}
             </ul>
-          </nav>
+          </motion.nav>
 
-          <address className="site-footer__contact">
+          {/* Column 3: Contact */}
+          <motion.address className="site-footer__contact" variants={columnVariants}>
             <h2 className="site-footer__heading">Contact</h2>
-            <a href="mailto:Awan@acplogs.com">Awan@acplogs.com</a>
-            <a href="tel:+92418738133">+92-41-8738133</a>
-          </address>
+            <div className="site-footer__contact-items">
+              <a href="mailto:Awan@acplogs.com" className="site-footer__contact-link">
+                <span className="site-footer__contact-icon">
+                  <Mail size={15} aria-hidden="true" />
+                </span>
+                <span>Awan@acplogs.com</span>
+                <ArrowUpRight size={13} aria-hidden="true" />
+              </a>
+              <a href="tel:+92418738133" className="site-footer__contact-link">
+                <span className="site-footer__contact-icon">
+                  <Phone size={15} aria-hidden="true" />
+                </span>
+                <span>+92-41-8738133</span>
+                <ArrowUpRight size={13} aria-hidden="true" />
+              </a>
+            </div>
+            <span className="site-footer__hours">
+              Operating: 24/7 Global Client Coordination
+            </span>
+          </motion.address>
 
-          <address className="site-footer__address">
-            <h2 className="site-footer__heading">Address</h2>
-            <p>
-              P-31, Chenab Market, Madina Town, Faisalabad, Punjab, Pakistan
-            </p>
-          </address>
+          {/* Column 4: Office */}
+          <motion.address className="site-footer__address" variants={columnVariants}>
+            <h2 className="site-footer__heading">Office</h2>
+            <div className="site-footer__address-box">
+              <div className="site-footer__contact-icon">
+                <MapPin size={16} aria-hidden="true" />
+              </div>
+              <div className="site-footer__address-info">
+                <span className="site-footer__location-label">Location</span>
+                <p>
+                  P-31, Chenab Market, Madina Town, Faisalabad, Punjab, Pakistan
+                </p>
+              </div>
+            </div>
+          </motion.address>
         </div>
       </motion.div>
 
+      {/* Marquee signature banner */}
       <div
         className="site-footer__signature"
         role="group"
@@ -109,7 +182,12 @@ function Footer() {
       </div>
 
       <div className="site-footer__bottom">
-        <p>Property of ACP Logistics LTD</p>
+        <div className="site-footer__bottom-inner">
+          <p>© {new Date().getFullYear()} ACP Logistics LTD. All Rights Reserved.</p>
+          <p className="site-footer__legal-tag">
+            Operating Since 2005 • Pakistan & International Supply Chains
+          </p>
+        </div>
       </div>
     </footer>
   )
