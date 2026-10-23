@@ -1,10 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import {
-  ArrowUpRight,
   Globe2,
   Handshake,
   ShieldCheck,
-  Sparkles,
 } from 'lucide-react'
 import { gsap, ScrollTrigger } from '../animations/gsap.js'
 import './AboutPage.css'
@@ -117,16 +115,6 @@ function AboutPage() {
   const videoRef = useRef(null)
   const [activeReason, setActiveReason] = useState(0)
   const [videoError, setVideoError] = useState(false)
-
-  // SPA navigation helper for in-page / cross-page transitions
-  const handleNavClick = (event, href) => {
-    if (href.startsWith('/') && !href.startsWith('//') && !href.includes('#')) {
-      event.preventDefault()
-      window.history.pushState(null, '', href)
-      window.dispatchEvent(new Event('popstate'))
-      window.scrollTo(0, 0)
-    }
-  }
 
   useEffect(() => {
     const page = pageRef.current
@@ -363,25 +351,22 @@ function AboutPage() {
         })
       }
 
-      // Animate 24/7 pulse & entrance
-      const supportElement = page.querySelector('.about-fact-value--support')
-      if (supportElement) {
-        gsap.fromTo(
-          supportElement,
-          { scale: 0.85, letterSpacing: '0.08em' },
-          {
-            scale: 1,
-            letterSpacing: '-0.03em',
-            duration: 1.2,
-            ease: 'elastic.out(1, 0.6)',
-            scrollTrigger: {
-              trigger: supportElement,
-              start: 'top 85%',
-              once: true,
-            },
+      gsap.fromTo(
+        page.querySelectorAll('.about-fact-value'),
+        { autoAlpha: 0.4, y: 16 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.9,
+          ease: 'power3.out',
+          stagger: 0.08,
+          scrollTrigger: {
+            trigger: '.about-facts__grid',
+            start: 'top 82%',
+            once: true,
           },
-        )
-      }
+        },
+      )
 
       // Generic Headings Stagger
       gsap.utils.toArray('.about-section-heading-anim', page).forEach((heading) => {
@@ -673,8 +658,6 @@ function AboutPage() {
 
             {/* Right Column: Scroll-Driven Character-by-Character Fill */}
             <div className="about-commitment__right">
-              <div className="about-commitment__rule about-commitment__enter" aria-hidden="true" />
-
               <div className="about-commitment__scroll-text-wrap about-commitment__enter">
                 <p
                   className="about-commitment__scroll-text"
@@ -688,20 +671,6 @@ function AboutPage() {
                 >
                   {renderFillText(COMMITMENT_PARAGRAPH_2)}
                 </p>
-              </div>
-
-              <div className="about-commitment__footer-action about-commitment__enter">
-                <a
-                  className="about-button-primary"
-                  href="/contact"
-                  onClick={(e) => handleNavClick(e, '/contact')}
-                >
-                  <span>Partner With Us</span>
-                  <ArrowUpRight size={16} aria-hidden="true" />
-                </a>
-                <span className="about-commitment__verify-tag">
-                  ISO Compliant • Global Freight Forwarder
-                </span>
               </div>
             </div>
           </div>
@@ -736,7 +705,6 @@ function AboutPage() {
                 <div className="about-fact-card__hud">
                   <span className="about-fact-card__index">0{index + 1}</span>
                   <span className="about-fact-card__tag">
-                    <Sparkles size={12} aria-hidden="true" />
                     {highlight}
                   </span>
                 </div>

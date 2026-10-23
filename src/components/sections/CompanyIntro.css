@@ -110,6 +110,7 @@
   margin: 0;
   margin-inline: auto;
   color: rgba(236, 242, 242, 0.76);
+  font-family: var(--font-body);
   font-size: 16px;
   line-height: 1.8;
 }

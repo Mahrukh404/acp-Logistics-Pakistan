@@ -1,5 +1,5 @@
-import { useLayoutEffect, useRef, useState } from 'react'
-import { ArrowDown, ArrowUpRight, CheckCircle2, ChevronRight } from 'lucide-react'
+import { useCallback, useLayoutEffect, useRef, useState } from 'react'
+import { ArrowUpRight } from 'lucide-react'
 import { gsap, ScrollTrigger } from '../animations/gsap.js'
 import services from '../data/services.js'
 import './ServicesPage.css'
@@ -13,224 +13,456 @@ const serviceDescriptions = [
   'acp Logistics provides flexible LCL and FCL shipping solutions tailored to diverse cargo volumes and business requirements. Less than Container Load (LCL) enables shared container space, while Full Container Load (FCL) offers dedicated container capacity. We coordinate shipment planning, cargo consolidation where applicable, and shipping documentation to deliver reliable and cost-effective freight solutions.',
 ]
 
-const serviceCapabilities = [
-  ['FCL & LCL Cargo', 'Bulk Ocean Shipments', 'Global Route Planning', 'Customs Documentation'],
-  ['Origin Pick-Up', 'Intermodal Transit', 'Last-Mile Delivery', 'Real-Time Journey Updates'],
-  ['Express Air Freight', 'Scheduled Global Flights', 'Charter Coordination', 'High-Priority Handling'],
-  ['Secure Storage Facilities', 'Inventory Organization', 'Consolidation & Cross-Dock', 'Export & Import Warehousing'],
-  ['Import & Export Clearance', 'Tariff & Duty Verification', 'Regulatory Compliance', 'Rapid Customs Filing'],
-  ['Full Container Load (FCL)', 'Less than Container Load (LCL)', 'Shared Capacity Options', 'Direct Port-to-Port'],
+const serviceMetaTags = [
+  'GLOBAL OCEAN TRANSIT // CONTAINER LOGISTICS',
+  'MULTIMODAL END-TO-END // FIRST TO LAST MILE',
+  'PRIORITY AIR CARGO // EXPEDITED FREIGHT',
+  'SECURE WAREHOUSING // INVENTORY & CROSS-DOCK',
+  'CUSTOMS BROKERAGE // REGULATORY COMPLIANCE',
+  'CONSOLIDATED FREIGHT // FULL & SHARED CAPACITY',
 ]
+
+const DESKTOP_QUERY = '(min-width: 1025px) and (prefers-reduced-motion: no-preference)'
+
+function getPanelIndexFromHash(hash) {
+  if (!hash) return -1
+  if (hash === '#top') return 0
+  const match = hash.match(/^#service-(\d{2})$/)
+  if (!match) return -1
+  return Number(match[1])
+}
+
+function renderWords(text) {
+  if (!text) return null
+  const words = text.split(' ')
+  return words.map((word, i) => (
+    <span className="service-word-wrap" key={i}>
+      <span className="service-word">{word}</span>
+      {i < words.length - 1 ? ' ' : ''}
+    </span>
+  ))
+}
 
 function ServicesPage() {
   const pageRef = useRef(null)
+  const stageRef = useRef(null)
+  const trackRef = useRef(null)
   const progressFillRef = useRef(null)
-  const [activeSection, setActiveSection] = useState(1)
+  const activeCounterRef = useRef(null)
+  const horizontalTriggerRef = useRef(null)
+  const videoRef = useRef(null)
+  const [videoError, setVideoError] = useState(false)
+  const [activeSlide, setActiveSlide] = useState(1)
+
+  const handleImageMouseMove = useCallback((e) => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const card = e.currentTarget
+    const rect = card.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    const centerX = rect.width / 2
+    const centerY = rect.height / 2
+    const rotateX = ((y - centerY) / centerY) * -5
+    const rotateY = ((x - centerX) / centerX) * 5
+
+    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.015, 1.015, 1.015)`
+  }, [])
+
+  const handleImageMouseLeave = useCallback((e) => {
+    const card = e.currentTarget
+    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)'
+  }, [])
 
   useLayoutEffect(() => {
+    const page = pageRef.current
+    const stage = stageRef.current
+    const track = trackRef.current
+    if (!page || !stage || !track) return undefined
+
     const ctx = gsap.context(() => {
       const media = gsap.matchMedia()
 
-      // Desktop & Tablet with motion enabled
-      media.add('(min-width: 769px) and (prefers-reduced-motion: no-preference)', () => {
-        const sections = gsap.utils.toArray('[data-service-section]', pageRef.current)
-        const listContainer = pageRef.current.querySelector('.services-page__list')
+      // -------------------------------------------------------------
+      // 1. Universal Hero Entrance Animations (Smooth 3D Reveal)
+      // -------------------------------------------------------------
+      const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+      const heroWords = page.querySelectorAll('.service-hero__word')
+      const heroLine = page.querySelector('.service-hero__accent-line')
+      const heroSubtitle = page.querySelector('.service-hero__subtitle')
+      const heroBadge = page.querySelector('.service-hero__tag-strip')
 
-        // Hero Intro Animation
-        const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } })
-        heroTl
-          .fromTo(
-            '.services-page__eyebrow',
-            { autoAlpha: 0, y: -15 },
-            { autoAlpha: 1, y: 0, duration: 0.6 }
-          )
-          .fromTo(
-            '.services-page__intro h1',
-            { autoAlpha: 0, y: 35 },
-            { autoAlpha: 1, y: 0, duration: 0.85 },
-            '-=0.3'
-          )
-          .fromTo(
-            '.services-page__lead',
-            { autoAlpha: 0, y: 25 },
-            { autoAlpha: 1, y: 0, duration: 0.75 },
-            '-=0.45'
-          )
-          .fromTo(
-            '.services-page__nav-pills',
-            { autoAlpha: 0, y: 15 },
-            { autoAlpha: 1, y: 0, duration: 0.65 },
-            '-=0.4'
-          )
-          .fromTo(
-            '.services-page__scroll',
-            { autoAlpha: 0, y: 10 },
-            { autoAlpha: 1, y: 0, duration: 0.5 },
-            '-=0.3'
-          )
+      if (heroBadge) {
+        heroTl.fromTo(
+          heroBadge,
+          { autoAlpha: 0, y: -16 },
+          { autoAlpha: 1, y: 0, duration: 0.7, delay: 0.1 }
+        )
+      }
 
-        // Global Scroll Progress Bar
-        if (progressFillRef.current && listContainer) {
-          gsap.fromTo(
-            progressFillRef.current,
-            { scaleX: 0 },
-            {
-              scaleX: 1,
-              ease: 'none',
-              scrollTrigger: {
-                trigger: listContainer,
-                start: 'top 80%',
-                end: 'bottom 90%',
-                scrub: 0.3,
-              },
-            }
-          )
+      if (heroWords.length > 0) {
+        heroTl.fromTo(
+          heroWords,
+          {
+            autoAlpha: 0,
+            y: 50,
+            rotateX: 45,
+            transformOrigin: '0% 50% -40px',
+          },
+          {
+            autoAlpha: 1,
+            y: 0,
+            rotateX: 0,
+            duration: 1.05,
+            stagger: 0.15,
+            ease: 'power3.out',
+          },
+          '-=0.4'
+        )
+      }
+
+      if (heroLine) {
+        heroTl.fromTo(
+          heroLine,
+          { scaleX: 0 },
+          { scaleX: 1, duration: 1.1, ease: 'expo.out' },
+          '-=0.55'
+        )
+      }
+
+      if (heroSubtitle) {
+        heroTl.fromTo(
+          heroSubtitle,
+          { autoAlpha: 0, y: 24, filter: 'blur(4px)' },
+          { autoAlpha: 1, y: 0, filter: 'blur(0px)', duration: 0.85, ease: 'power2.out' },
+          '-=0.5'
+        )
+      }
+
+      // Parallax on hero background video
+      const heroVideo = page.querySelector('.service-hero__video')
+      if (heroVideo) {
+        gsap.to(heroVideo, {
+          yPercent: 14,
+          scale: 1.06,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '.service-hero',
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true,
+          },
+        })
+      }
+
+      // -------------------------------------------------------------
+      // 2. Desktop Horizontal Scrub & Panel Transitions
+      // -------------------------------------------------------------
+      media.add(DESKTOP_QUERY, () => {
+        const panels = gsap.utils.toArray('[data-service-panel]', track)
+
+        const sizePanels = () => {
+          const width = stage.clientWidth
+          const height = stage.clientHeight
+          panels.forEach((panel) => {
+            panel.style.width = `${width}px`
+            panel.style.height = `${height}px`
+          })
         }
 
-        // Each Service Section Animation
-        sections.forEach((section, idx) => {
-          const numberEl = section.querySelector('[data-service-num]')
-          const titleEl = section.querySelector('[data-service-title]')
-          const descEl = section.querySelector('[data-service-desc]')
-          const capabilitiesEl = section.querySelector('[data-service-capabilities]')
-          const ctaEl = section.querySelector('[data-service-cta]')
-          const imageWrap = section.querySelector('[data-service-image-wrap]')
-          const imageInner = section.querySelector('[data-service-image]')
-          const badgeEl = section.querySelector('[data-service-badge]')
-          const isReverse = section.dataset.direction === 'reverse'
+        sizePanels()
 
-          // Active Section Tracking
-          ScrollTrigger.create({
-            trigger: section,
-            start: 'top 55%',
-            end: 'bottom 45%',
-            onEnter: () => setActiveSection(idx + 1),
-            onEnterBack: () => setActiveSection(idx + 1),
+        const getScrollLength = () => Math.max(0, track.scrollWidth - stage.clientWidth)
+
+        gsap.set(track, { x: 0 })
+        if (progressFillRef.current) {
+          gsap.set(progressFillRef.current, {
+            width: `${100 / Math.max(panels.length, 1)}%`,
           })
+        }
 
-          // Image Entrance Mask / Reveal
-          const clipStart = isReverse
-            ? 'inset(0% 0% 0% 100%)'
-            : 'inset(0% 100% 0% 0%)'
+        const tween = gsap.to(track, {
+          x: () => -getScrollLength(),
+          ease: 'none',
+          scrollTrigger: {
+            trigger: stage,
+            start: 'top top',
+            end: () => `+=${getScrollLength()}`,
+            pin: true,
+            scrub: true,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              if (progressFillRef.current) {
+                const startWidth = 100 / Math.max(panels.length, 1)
+                progressFillRef.current.style.width = `${startWidth + self.progress * (100 - startWidth)}%`
+              }
+              const currentIdx = Math.min(
+                services.length,
+                Math.max(1, Math.round(self.progress * (panels.length - 1)))
+              )
+              setActiveSlide(currentIdx)
+            },
+          },
+        })
 
-          gsap.fromTo(
-            imageWrap,
-            { clipPath: clipStart, autoAlpha: 0.7 },
-            {
-              clipPath: 'inset(0% 0% 0% 0%)',
-              autoAlpha: 1,
-              duration: 1.15,
-              ease: 'power3.inOut',
-              scrollTrigger: {
-                trigger: section,
-                start: 'top 76%',
-                toggleActions: 'play none none none',
-              },
-            }
-          )
+        horizontalTriggerRef.current = tween.scrollTrigger
 
-          // Inner Image Smooth Parallax & Scale Settle
-          gsap.fromTo(
-            imageInner,
-            { scale: 1.15, yPercent: -10 },
-            {
-              scale: 1,
-              yPercent: 10,
-              ease: 'none',
-              scrollTrigger: {
-                trigger: section,
-                start: 'top bottom',
-                end: 'bottom top',
-                scrub: 1.2,
-              },
-            }
-          )
+        // Parallax depth on images inside service panels during horizontal scroll
+        panels.forEach((panel, i) => {
+          if (panel.dataset.panelType === 'intro') return
+          const img = panel.querySelector('.service-panel__img')
+          const heading = panel.querySelector('.service-panel__heading')
+          const copy = panel.querySelector('.service-panel__copy-inner')
 
-          // Badge Reveal over image
-          if (badgeEl) {
+          if (img) {
             gsap.fromTo(
-              badgeEl,
-              { autoAlpha: 0, y: 15 },
+              img,
+              { scale: 1.12, xPercent: -6 },
               {
-                autoAlpha: 1,
-                y: 0,
-                duration: 0.7,
-                delay: 0.3,
-                ease: 'power2.out',
+                scale: 1,
+                xPercent: 6,
+                ease: 'none',
                 scrollTrigger: {
-                  trigger: section,
-                  start: 'top 70%',
-                  toggleActions: 'play none none none',
+                  trigger: stage,
+                  start: () => `top+=${Math.max(0, (i - 1) * stage.clientWidth)} top`,
+                  end: () => `top+=${(i + 1) * stage.clientWidth} top`,
+                  scrub: true,
                 },
               }
             )
           }
 
-          // Staggered Text / Copy Reveal
-          const textElements = [numberEl, titleEl, descEl, capabilitiesEl, ctaEl].filter(Boolean)
+          if (heading) {
+            gsap.fromTo(
+              heading,
+              { y: 35, autoAlpha: 0.8 },
+              {
+                y: 0,
+                autoAlpha: 1,
+                ease: 'power2.out',
+                scrollTrigger: {
+                  trigger: stage,
+                  start: () => `top+=${Math.max(0, (i - 0.7) * stage.clientWidth)} top`,
+                  end: () => `top+=${i * stage.clientWidth} top`,
+                  scrub: 1,
+                },
+              }
+            )
+          }
+
+          if (copy) {
+            gsap.fromTo(
+              copy,
+              { x: 25 },
+              {
+                x: 0,
+                ease: 'power2.out',
+                scrollTrigger: {
+                  trigger: stage,
+                  start: () => `top+=${Math.max(0, (i - 0.8) * stage.clientWidth)} top`,
+                  end: () => `top+=${i * stage.clientWidth} top`,
+                  scrub: 1,
+                },
+              }
+            )
+          }
+
+          const words = panel.querySelectorAll('.service-word')
+          if (words.length > 0) {
+            gsap.fromTo(
+              words,
+              { opacity: 0.25, y: 4 },
+              {
+                opacity: 1,
+                y: 0,
+                ease: 'power1.out',
+                stagger: 0.02,
+                scrollTrigger: {
+                  trigger: stage,
+                  start: () => `top+=${Math.max(0, (i - 0.75) * stage.clientWidth)} top`,
+                  end: () => `top+=${(i - 0.15) * stage.clientWidth} top`,
+                  scrub: 0.6,
+                },
+              }
+            )
+          }
+        })
+
+        const scrollToPanel = (index) => {
+          const trigger = horizontalTriggerRef.current
+          if (!trigger || index < 0) return
+          const clamped = Math.min(index, panels.length - 1)
+          const top =
+            trigger.start +
+            (clamped / Math.max(panels.length - 1, 1)) * (trigger.end - trigger.start)
+          window.scrollTo({ top, behavior: 'smooth' })
+        }
+
+        const onHashClick = (event) => {
+          const link = event.target.closest('a[href^="#"]')
+          if (!link || !page.contains(link)) return
+          const index = getPanelIndexFromHash(link.getAttribute('href'))
+          if (index < 0) return
+          event.preventDefault()
+          scrollToPanel(index)
+        }
+
+        page.addEventListener('click', onHashClick)
+
+        const onResize = () => {
+          sizePanels()
+          ScrollTrigger.refresh()
+        }
+
+        window.addEventListener('resize', onResize)
+
+        const images = stage.querySelectorAll('img')
+        const refreshWhenReady = () => ScrollTrigger.refresh()
+        images.forEach((image) => {
+          if (image.complete) return
+          image.addEventListener('load', refreshWhenReady, { once: true })
+          image.addEventListener('error', refreshWhenReady, { once: true })
+        })
+
+        requestAnimationFrame(() => {
+          sizePanels()
+          ScrollTrigger.refresh()
+          const hashIndex = getPanelIndexFromHash(window.location.hash)
+          if (hashIndex >= 0 && horizontalTriggerRef.current) {
+            const trigger = horizontalTriggerRef.current
+            const top =
+              trigger.start +
+              (hashIndex / Math.max(panels.length - 1, 1)) * (trigger.end - trigger.start)
+            window.scrollTo({ top, behavior: 'auto' })
+          }
+        })
+
+        return () => {
+          page.removeEventListener('click', onHashClick)
+          window.removeEventListener('resize', onResize)
+          horizontalTriggerRef.current = null
+          panels.forEach((panel) => {
+            panel.style.width = ''
+            panel.style.height = ''
+          })
+        }
+      })
+
+      // -------------------------------------------------------------
+      // 3. Mobile / Tablet Stacked Transitions
+      // -------------------------------------------------------------
+      media.add('(max-width: 1024px) and (prefers-reduced-motion: no-preference)', () => {
+        const panels = gsap.utils.toArray('[data-service-panel]', track)
+
+        panels.forEach((panel) => {
+          if (panel.dataset.panelType === 'intro') return
+          const image = panel.querySelector('[data-service-image]')
+          const copy = panel.querySelector('[data-service-copy]')
+          const number = panel.querySelector('.service-panel__number')
+          const title = panel.querySelector('.service-panel__title')
+
           gsap.fromTo(
-            textElements,
+            [image, number, title, copy].filter(Boolean),
             { autoAlpha: 0, y: 35 },
             {
               autoAlpha: 1,
               y: 0,
-              duration: 0.85,
-              stagger: 0.1,
+              duration: 0.8,
+              stagger: 0.12,
               ease: 'power3.out',
               scrollTrigger: {
-                trigger: section,
-                start: 'top 74%',
-                toggleActions: 'play none none none',
+                trigger: panel,
+                start: 'top 80%',
+                toggleActions: 'play none none reverse',
               },
             }
           )
-        })
 
-        // Closing CTA Section Entrance
-        gsap.fromTo(
-          '.services-page__closing-content',
-          { autoAlpha: 0, y: 40, scale: 0.98 },
-          {
-            autoAlpha: 1,
-            y: 0,
-            scale: 1,
-            duration: 0.9,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: '.services-page__closing',
-              start: 'top 78%',
-              toggleActions: 'play none none none',
-            },
+          const words = panel.querySelectorAll('.service-word')
+          if (words.length > 0) {
+            gsap.fromTo(
+              words,
+              { opacity: 0.25, y: 4 },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.45,
+                stagger: 0.018,
+                ease: 'power2.out',
+                scrollTrigger: {
+                  trigger: panel.querySelector('[data-service-copy]') || panel,
+                  start: 'top 75%',
+                  toggleActions: 'play none none reverse',
+                },
+              }
+            )
           }
-        )
+        })
       })
 
-      // Mobile & Small Screens (< 769px)
-      media.add('(max-width: 768px) and (prefers-reduced-motion: no-preference)', () => {
-        const sections = gsap.utils.toArray('[data-service-section]', pageRef.current)
+      // 4. Closing "Have a Shipment in Mind?" CTA Section
+      const closingSection = page.querySelector('.services-page__closing')
+      if (closingSection) {
+        const closingEyebrow = closingSection.querySelector('.services-page__closing-eyebrow')
+        const closingWords = closingSection.querySelectorAll('.closing-word')
+        const closingLead = closingSection.querySelector('.services-page__closing-lead')
+        const closingBtn = closingSection.querySelector('.services-page__closing-btn')
 
-        sections.forEach((section) => {
-          const imageWrap = section.querySelector('[data-service-image-wrap]')
-          const copy = section.querySelector('[data-service-copy]')
+        const closingTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: closingSection,
+            start: 'top 82%',
+            once: true,
+          },
+        })
 
-          gsap.fromTo(
-            [imageWrap, copy],
-            { autoAlpha: 0, y: 24 },
+        if (closingEyebrow) {
+          closingTl.fromTo(
+            closingEyebrow,
+            { autoAlpha: 0, y: -16 },
+            { autoAlpha: 1, y: 0, duration: 0.6, ease: 'power2.out' }
+          )
+        }
+
+        if (closingWords.length > 0) {
+          closingTl.fromTo(
+            closingWords,
+            {
+              autoAlpha: 0,
+              y: 42,
+              rotateX: 45,
+              transformOrigin: '0% 50% -30px',
+            },
             {
               autoAlpha: 1,
               y: 0,
-              duration: 0.75,
-              stagger: 0.15,
-              ease: 'power2.out',
-              scrollTrigger: {
-                trigger: section,
-                start: 'top 82%',
-                toggleActions: 'play none none none',
-              },
-            }
+              rotateX: 0,
+              duration: 0.9,
+              stagger: 0.1,
+              ease: 'power3.out',
+            },
+            '-=0.3'
           )
-        })
-      })
+        }
+
+        if (closingLead) {
+          closingTl.fromTo(
+            closingLead,
+            { autoAlpha: 0, y: 22 },
+            { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power2.out' },
+            '-=0.4'
+          )
+        }
+
+        if (closingBtn) {
+          closingTl.fromTo(
+            closingBtn,
+            { autoAlpha: 0, y: 24, scale: 0.96 },
+            { autoAlpha: 1, y: 0, scale: 1, duration: 0.7, ease: 'back.out(1.3)' },
+            '-=0.3'
+          )
+        }
+      }
     }, pageRef)
 
     return () => ctx.revert()
@@ -238,174 +470,215 @@ function ServicesPage() {
 
   return (
     <main className="services-page" ref={pageRef}>
-      {/* Sticky Bottom Progress Bar (MVP Logistics Inspired) */}
-      <div className="services-progress" aria-hidden="true">
-        <div className="services-progress__bar">
-          <div className="services-progress__fill" ref={progressFillRef} />
-        </div>
-        <div className="services-progress__meta">
-          <span className="services-progress__label">ACP SERVICES FLOW</span>
-          <span className="services-progress__counter">
-            0{activeSection} / 0{services.length}
-          </span>
-        </div>
-      </div>
+      <div className="services-stage" ref={stageRef}>
+        <div className="services-track" ref={trackRef}>
+          {/* ============================================================== */}
+          {/* 1. HERO SECTION WITH CINEMATIC BACKGROUND VIDEO                */}
+          {/* ============================================================== */}
+          <section
+            className="service-hero"
+            data-service-panel
+            data-panel-type="intro"
+            id="top"
+            aria-labelledby="services-hero-title"
+          >
+            <div className="service-hero__video-layer">
+              {!videoError ? (
+                <video
+                  ref={videoRef}
+                  className="service-hero__video"
+                  src="/videos/service_hero.mp4"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="auto"
+                  poster="/images/sea_optimized.jpg"
+                  aria-hidden="true"
+                  tabIndex={-1}
+                  onError={() => setVideoError(true)}
+                />
+              ) : (
+                <img
+                  className="service-hero__video service-hero__video-fallback"
+                  src="/images/sea_optimized.jpg"
+                  alt="ACP Logistics Ocean and Air Freight Network"
+                />
+              )}
+              <div className="service-hero__scrim" aria-hidden="true" />
+              <div className="service-hero__grid-mesh" aria-hidden="true" />
+            </div>
 
-      {/* Hero Intro Section */}
-      <header className="services-page__intro" id="top">
-        <div className="services-page__intro-inner">
-          <p className="services-page__eyebrow">ACP LOGISTICS / OUR SERVICES</p>
-          <h1>Moving business forward, across every border.</h1>
-          <p className="services-page__lead">
-            From the first mile to the final handoff, explore practical logistics
-            support shaped around your cargo and your business.
-          </p>
+            <div className="service-hero__content">
+              <div className="service-hero__tag-strip" aria-hidden="true">
+                <span className="service-hero__tag-dot" />
+                <span className="service-hero__tag-text">
+                  GLOBAL LOGISTICS &bull; FREIGHT FORWARDING &bull; EST. 2005
+                </span>
+              </div>
 
-          {/* Quick-Jump Navigation Pills */}
-          <nav className="services-page__nav-pills" aria-label="Services quick links">
-            {services.map((service, index) => {
-              const number = String(index + 1).padStart(2, '0')
-              return (
-                <a
-                  className="services-page__nav-pill"
-                  href={`#service-${number}`}
-                  key={service.title}
-                >
-                  <span className="services-page__nav-pill-num">{number}</span>
-                  <span className="services-page__nav-pill-title">{service.title}</span>
-                </a>
-              )
-            })}
-          </nav>
+              <h1 className="service-hero__title" id="services-hero-title">
+                <span className="service-hero__word-wrap">
+                  <span className="service-hero__word">OUR</span>
+                </span>{' '}
+                <span className="service-hero__word-wrap">
+                  <span className="service-hero__word">SERVICES</span>
+                </span>
+              </h1>
 
-          <a className="services-page__scroll" href="#service-01">
-            <span>Explore our services</span>
-            <ArrowDown aria-hidden="true" size={16} />
-          </a>
-        </div>
-      </header>
+              <div className="service-hero__line-wrap" aria-hidden="true">
+                <div className="service-hero__accent-line" />
+              </div>
 
-      {/* Service Showcase Sections */}
-      <div className="services-page__list">
-        {services.map((service, index) => {
-          const number = String(index + 1).padStart(2, '0')
-          const reverse = index % 2 === 1
-          const capabilities = serviceCapabilities[index] || []
+              <p className="service-hero__subtitle">
+                Across borders, beyond expectations.
+              </p>
+            </div>
+          </section>
 
-          return (
-            <article
-              className={`service-feature${reverse ? ' service-feature--reverse' : ''}`}
-              data-service-section
-              data-direction={reverse ? 'reverse' : 'forward'}
-              id={`service-${number}`}
-              key={service.title}
-              aria-labelledby={`service-title-${number}`}
-            >
-              {/* Image Column with Mask Reveal & Parallax Container */}
-              <div
-                className="service-feature__image-wrap"
-                data-service-image-wrap
+          {/* ============================================================== */}
+          {/* 2. INDIVIDUAL SERVICE PANELS                                   */}
+          {/* ============================================================== */}
+          {services.map((service, index) => {
+            const number = String(index + 1).padStart(2, '0')
+            const metaTag = serviceMetaTags[index] || 'ACP LOGISTICS // FREIGHT SERVICES'
+
+            return (
+              <article
+                className="service-panel"
+                data-service-panel
+                data-panel-type="service"
+                id={`service-${number}`}
+                key={service.title}
+                aria-labelledby={`service-title-${number}`}
               >
-                <div className="service-feature__image-inner">
+                {/* Left Column: Image with Interactive 3D Tilt, Prominent Number & Title */}
+                <div
+                  className="service-panel__image"
+                  data-service-image
+                  onMouseMove={handleImageMouseMove}
+                  onMouseLeave={handleImageMouseLeave}
+                >
                   <img
-                    className="service-feature__image"
-                    data-service-image
+                    className="service-panel__img"
                     src={service.image}
                     alt={`${service.title} logistics`}
                     loading={index === 0 ? 'eager' : 'lazy'}
                     decoding="async"
                   />
-                </div>
-                <div
-                  className="service-feature__image-badge"
-                  data-service-badge
-                  aria-hidden="true"
-                >
-                  <span className="service-feature__image-badge-number">{number}</span>
-                  <span className="service-feature__image-badge-total">
-                    / 0{services.length}
-                  </span>
-                  <span className="service-feature__image-badge-brand">ACP LOGISTICS</span>
-                </div>
-              </div>
+                  <div className="service-panel__image-scrim" aria-hidden="true" />
 
-              {/* Text & Content Column */}
-              <div className="service-feature__copy" data-service-copy>
-                <div className="service-feature__header" data-service-num>
-                  <span className="service-feature__number">{number}</span>
-                  <div className="service-feature__tag-wrap">
-                    <span className="service-feature__tag-prefix">SERVICE HIGHLIGHT</span>
-                    <span className="service-feature__tag-divider" aria-hidden="true" />
-                    <span className="service-feature__tag-category">FREIGHT & SUPPLY CHAIN</span>
-                  </div>
-                </div>
-
-                <h2 id={`service-title-${number}`} data-service-title>
-                  {service.title}
-                </h2>
-
-                <p className="service-feature__description" data-service-desc>
-                  {serviceDescriptions[index]}
-                </p>
-
-                {/* Scope & Key Capabilities (MVP Structure) */}
-                {capabilities.length > 0 && (
-                  <div className="service-feature__capabilities" data-service-capabilities>
-                    <div className="service-feature__capabilities-label">
-                      <span>KEY CAPABILITIES & SCOPE</span>
-                    </div>
-                    <ul className="service-feature__capabilities-list">
-                      {capabilities.map((cap) => (
-                        <li className="service-feature__capability-item" key={cap}>
-                          <CheckCircle2 size={13} aria-hidden="true" className="service-feature__capability-icon" />
-                          <span>{cap}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                <div className="service-feature__actions" data-service-cta>
-                  <a
-                    className="service-feature__cta"
-                    href={`/contact?service=${encodeURIComponent(service.title)}`}
-                  >
-                    <span className="service-feature__cta-text">Enquire About This Service</span>
-                    <span className="service-feature__cta-icon-wrap" aria-hidden="true">
-                      <ArrowUpRight size={17} strokeWidth={2} />
+                  <div className="service-panel__image-topline" aria-hidden="true">
+                    <span className="service-panel__image-badge">
+                      <span className="service-panel__badge-dot" />
+                      <span>{metaTag}</span>
                     </span>
-                  </a>
-                  <a
-                    className="service-feature__secondary-link"
-                    href="/contact"
-                  >
-                    <span>General Consultation</span>
-                    <ChevronRight size={14} aria-hidden="true" />
-                  </a>
+                    <span className="service-panel__status-pill">OPERATIONAL</span>
+                  </div>
+
+                  <div className="service-panel__heading">
+                    <span className="service-panel__number" aria-hidden="true">
+                      {number}
+                    </span>
+                    <h2
+                      className="service-panel__title"
+                      id={`service-title-${number}`}
+                    >
+                      {service.title}
+                    </h2>
+                  </div>
                 </div>
-              </div>
-            </article>
-          )
-        })}
+
+                {/* Right Column: Expanded Justified Description & Inquire CTA */}
+                <div className="service-panel__copy" data-service-copy>
+                  <div className="service-panel__copy-inner">
+                    <div className="service-panel__copy-header" aria-hidden="true">
+                      <div className="service-panel__copy-tag">
+                        <span>SERVICE OVERVIEW</span>
+                        <span className="service-panel__tag-sep">&bull;</span>
+                        <span>0{index + 1} / 06</span>
+                      </div>
+                      <div className="service-panel__copy-loc">
+                        <span>PAKISTAN &bull; WORLDWIDE</span>
+                      </div>
+                    </div>
+
+                    <div className="service-panel__copy-rule" aria-hidden="true" />
+
+                    <p
+                      className="service-panel__description"
+                      aria-label={serviceDescriptions[index] || service.description}
+                    >
+                      {renderWords(serviceDescriptions[index] || service.description)}
+                    </p>
+
+                    <div className="service-panel__actions">
+                      <a
+                        className="service-panel__cta"
+                        href={`/contact?service=${encodeURIComponent(service.title)}`}
+                        aria-label={`Enquire about ${service.title}`}
+                      >
+                        <span>Enquire about this service</span>
+                        <ArrowUpRight aria-hidden="true" size={20} strokeWidth={2} />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            )
+          })}
+        </div>
+
+        {/* ============================================================== */}
+        {/* DESKTOP PROGRESS HUD & SLIDE COUNTER                           */}
+        {/* ============================================================== */}
+        <div className="services-hud" aria-hidden="true">
+          <div className="services-hud__counter" ref={activeCounterRef}>
+            <span className="services-hud__counter-current">
+              {String(activeSlide).padStart(2, '0')}
+            </span>
+            <span className="services-hud__counter-sep">/</span>
+            <span className="services-hud__counter-total">
+              {String(services.length).padStart(2, '0')}
+            </span>
+          </div>
+
+          <div className="services-progressbar">
+            <div className="services-progressbar__fill" ref={progressFillRef} />
+          </div>
+        </div>
       </div>
 
-      {/* Closing CTA Section */}
+      {/* ============================================================== */}
+      {/* 3. CLOSING CTA SECTION ("Have a shipment in mind?")            */}
+      {/* ============================================================== */}
       <section className="services-page__closing" aria-labelledby="closing-title">
         <div className="services-page__closing-content">
-          <p className="services-page__closing-eyebrow">LET'S MOVE FORWARD</p>
-          <h2 id="closing-title">Have a shipment in mind?</h2>
+          <p className="services-page__closing-eyebrow">LET&apos;S MOVE FORWARD</p>
+          <h2 id="closing-title" className="services-page__closing-title">
+            <span className="closing-word-wrap">
+              <span className="closing-word">Have</span>
+            </span>{' '}
+            <span className="closing-word-wrap">
+              <span className="closing-word">a</span>
+            </span>{' '}
+            <span className="closing-word-wrap">
+              <span className="closing-word">shipment</span>
+            </span>{' '}
+            <span className="closing-word-wrap">
+              <span className="closing-word">in</span>
+            </span>{' '}
+            <span className="closing-word-wrap">
+              <span className="closing-word">mind?</span>
+            </span>
+          </h2>
           <p className="services-page__closing-lead">
-            Connect with our freight specialists in Karachi. We tailor end-to-end
-            freight forwarding, storage, and customs logistics to your timeline and cargo.
+            We tailor end-to-end freight forwarding, storage, and customs logistics to your timeline and cargo.
           </p>
           <div className="services-page__closing-actions">
             <a className="services-page__closing-btn" href="/contact">
               <span>Talk to our team</span>
               <ArrowUpRight aria-hidden="true" size={18} strokeWidth={2} />
-            </a>
-            <a className="services-page__closing-back" href="#top">
-              <span>Back to Top</span>
-              <ArrowDown aria-hidden="true" size={15} style={{ transform: 'rotate(180deg)' }} />
             </a>
           </div>
         </div>

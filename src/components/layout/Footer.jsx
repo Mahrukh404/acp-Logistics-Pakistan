@@ -1,13 +1,13 @@
 import { useRef } from 'react'
-import { ArrowUpRight, Mail, MapPin, Phone } from 'lucide-react'
+import { ArrowUpRight, Mail, Phone } from 'lucide-react'
 import { motion, useInView, useReducedMotion } from 'motion/react'
 import './Footer.css'
 
 const footerLinks = [
   { label: 'Home', href: '/' },
   { label: 'About Us', href: '/about' },
-  { label: 'Our Services', href: '/services' },
-  { label: 'Contact Us', href: '/contact' },
+  { label: 'Services', href: '/services' },
+  { label: 'Contact', href: '/contact' },
 ]
 
 function Footer() {
@@ -54,6 +54,23 @@ function Footer() {
       ref={footerRef}
       aria-labelledby="site-footer-title"
     >
+      {/* Background Video Layer */}
+      <div className="site-footer__video-layer" aria-hidden="true">
+        <video
+          className="site-footer__video"
+          src="/videos/footerf.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          onError={(e) => {
+            e.currentTarget.style.display = 'none'
+          }}
+        />
+        <div className="site-footer__video-scrim" />
+      </div>
+
       {/* Top luminous decorative accent border */}
       <div className="site-footer__top-accent" aria-hidden="true" />
 
@@ -114,35 +131,26 @@ function Footer() {
           <motion.address className="site-footer__contact" variants={columnVariants}>
             <h2 className="site-footer__heading">Contact</h2>
             <div className="site-footer__contact-items">
-              <a href="mailto:Awan@acplogs.com" className="site-footer__contact-link">
+              <div className="site-footer__contact-item">
                 <span className="site-footer__contact-icon">
                   <Mail size={15} aria-hidden="true" />
                 </span>
                 <span>Awan@acplogs.com</span>
-                <ArrowUpRight size={13} aria-hidden="true" />
-              </a>
-              <a href="tel:+92418738133" className="site-footer__contact-link">
+              </div>
+              <div className="site-footer__contact-item">
                 <span className="site-footer__contact-icon">
                   <Phone size={15} aria-hidden="true" />
                 </span>
                 <span>+92-41-8738133</span>
-                <ArrowUpRight size={13} aria-hidden="true" />
-              </a>
+              </div>
             </div>
-            <span className="site-footer__hours">
-              Operating: 24/7 Global Client Coordination
-            </span>
           </motion.address>
 
-          {/* Column 4: Office */}
+          {/* Column 4: Location */}
           <motion.address className="site-footer__address" variants={columnVariants}>
-            <h2 className="site-footer__heading">Office</h2>
+            <h2 className="site-footer__heading">Location</h2>
             <div className="site-footer__address-box">
-              <div className="site-footer__contact-icon">
-                <MapPin size={16} aria-hidden="true" />
-              </div>
               <div className="site-footer__address-info">
-                <span className="site-footer__location-label">Location</span>
                 <p>
                   P-31, Chenab Market, Madina Town, Faisalabad, Punjab, Pakistan
                 </p>

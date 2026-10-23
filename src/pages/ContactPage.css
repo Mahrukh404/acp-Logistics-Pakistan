@@ -23,7 +23,7 @@
   padding: clamp(130px, 16vh, 180px) clamp(20px, 6vw, 96px) clamp(80px, 10vh, 120px);
   background-color: #f7f9fb;
   color: var(--contact-ink);
-  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-body);
   text-align: left;
   overflow-x: clip;
 }
@@ -77,26 +77,6 @@
   text-align: center;
 }
 
-.contact-page__badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 14px;
-  border-radius: 999px;
-  background: rgba(11, 38, 60, 0.06);
-  border: 1px solid rgba(11, 38, 60, 0.1);
-  color: var(--contact-navy);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin-bottom: 20px;
-}
-
-.contact-page__badge svg {
-  color: #728d2d;
-}
-
 .contact-page__eyebrow {
   margin: 0;
   color: #5c7425;
@@ -110,12 +90,11 @@
 .contact-page__intro h1 {
   margin: 0 0 20px;
   color: var(--contact-navy);
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: clamp(48px, 6.8vw, 86px);
-  font-weight: 800;
-  line-height: 0.95;
-  letter-spacing: -0.025em;
-  text-transform: uppercase;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: clamp(40px, 5.4vw, 72px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
 }
 
 .contact-page__intro-lead {
@@ -186,7 +165,7 @@
 .contact-card {
   position: relative;
   display: grid;
-  grid-template-columns: 50px minmax(0, 1fr) auto;
+  grid-template-columns: 50px minmax(0, 1fr);
   align-items: center;
   gap: 16px;
   padding: 18px 22px;
@@ -200,25 +179,14 @@
   will-change: transform;
 }
 
-.contact-card--interactive {
-  cursor: pointer;
+.contact-card--static {
+  cursor: default;
+  pointer-events: auto;
 }
 
-.contact-card--interactive:hover {
-  border-color: rgba(11, 38, 60, 0.22);
-  background-color: #ffffff;
-  box-shadow: 0 16px 36px rgba(11, 38, 60, 0.1);
-}
-
-.contact-card--interactive:hover .contact-details__icon {
-  background-color: var(--contact-navy);
-  color: var(--contact-lime);
-  transform: scale(1.06);
-}
-
-.contact-card--interactive:hover .contact-card__arrow {
-  color: var(--contact-navy);
-  transform: translate(3px, -3px);
+.contact-card--static:hover {
+  border-color: rgba(11, 38, 60, 0.16);
+  box-shadow: 0 12px 28px rgba(11, 38, 60, 0.08);
 }
 
 .contact-details__icon {
@@ -255,11 +223,6 @@
   font-weight: 600;
   line-height: 1.5;
   overflow-wrap: anywhere;
-}
-
-.contact-card__arrow {
-  color: var(--contact-muted);
-  transition: transform 0.25s ease, color 0.25s ease;
 }
 
 /* Dedicated Assurance Card */
@@ -389,7 +352,7 @@
   border-radius: 8px;
   background-color: #fafbfc;
   color: var(--contact-navy);
-  font-family: inherit;
+  font-family: var(--font-body);
   font-size: 14px;
   line-height: 1.5;
   outline: none;
@@ -578,8 +541,7 @@
   .contact-card,
   .contact-form-panel,
   .contact-form__submit,
-  .contact-details__icon,
-  .contact-card__arrow {
+  .contact-details__icon {
     transform: none !important;
     transition-duration: 0.01ms !important;
   }

@@ -1,31 +1,20 @@
 import { useState } from 'react'
 import {
-  ArrowUpRight,
-  Clock,
   LoaderCircle,
   Mail,
   MapPin,
   Phone,
   ShieldCheck,
-  Sparkles,
+  ArrowUpRight,
 } from 'lucide-react'
 import { motion, useReducedMotion } from 'motion/react'
-import services from '../data/services.js'
 import './ContactPage.css'
 
 function ContactPage() {
-  const initialService = new URLSearchParams(window.location.search).get('service')
-  const selectedService = services.some(
-    (service) => service.title === initialService,
-  )
-    ? initialService
-    : ''
-  const [service, setService] = useState(selectedService)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [status, setStatus] = useState(null)
   const prefersReducedMotion = useReducedMotion()
 
-  // 3D Card Hover Perspective Handler
   const handleCardMouseMove = (e) => {
     if (prefersReducedMotion) return
     const card = e.currentTarget
@@ -72,7 +61,7 @@ function ContactPage() {
         body: JSON.stringify({
           fullName,
           email,
-          service,
+          service: '',
           subject,
           message,
           website: form.elements.website.value,
@@ -106,7 +95,6 @@ function ContactPage() {
         message: 'Thank you. Your enquiry has been delivered to our team.',
       })
       form.reset()
-      setService(selectedService)
     } catch {
       setStatus({
         type: 'error',
@@ -120,7 +108,6 @@ function ContactPage() {
 
   return (
     <main className="contact-page">
-      {/* Background ambient lighting accents */}
       <div className="contact-page__ambient" aria-hidden="true">
         <div className="contact-page__ambient-orb contact-page__ambient-orb--1" />
         <div className="contact-page__ambient-orb contact-page__ambient-orb--2" />
@@ -132,10 +119,6 @@ function ContactPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: prefersReducedMotion ? 0 : 0.75, ease: [0.16, 1, 0.3, 1] }}
       >
-        <div className="contact-page__badge">
-          <Sparkles size={13} aria-hidden="true" />
-          <span>ACP LOGISTICS / CONTACT</span>
-        </div>
         <h1>Let’s discuss your logistics needs.</h1>
         <p className="contact-page__intro-lead">
           Tell us what you’re moving and how we can help. Our team coordinates across international
@@ -168,15 +151,12 @@ function ContactPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.18 }}
             >
-              <div className="contact-details__icon">
+              <div className="contact-details__icon contact-details__icon--email">
                 <Mail aria-hidden="true" size={20} />
               </div>
               <div className="contact-card__info">
                 <span className="contact-details__label">Email Us</span>
                 <span className="contact-details__value">Awan@acplogs.com</span>
-              </div>
-              <div className="contact-card__arrow">
-                <ArrowUpRight aria-hidden="true" size={17} />
               </div>
             </motion.a>
 
@@ -189,31 +169,31 @@ function ContactPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.26 }}
             >
-              <div className="contact-details__icon">
+              <div className="contact-details__icon contact-details__icon--phone">
                 <Phone aria-hidden="true" size={20} />
               </div>
               <div className="contact-card__info">
                 <span className="contact-details__label">Call Direct</span>
                 <span className="contact-details__value">+92-41-8738133</span>
               </div>
-              <div className="contact-card__arrow">
-                <ArrowUpRight aria-hidden="true" size={17} />
-              </div>
             </motion.a>
 
             <motion.div
-              className="contact-card contact-card--static"
+              tabIndex={0}
+              role="region"
+              aria-label="Location"
+              className="contact-card contact-card--interactive"
               onMouseMove={handleCardMouseMove}
               onMouseLeave={handleCardMouseLeave}
               initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.34 }}
             >
-              <div className="contact-details__icon">
+              <div className="contact-details__icon contact-details__icon--location">
                 <MapPin aria-hidden="true" size={20} />
               </div>
               <div className="contact-card__info">
-                <span className="contact-details__label">Headquarters</span>
+                <span className="contact-details__label">Location</span>
                 <span className="contact-details__value">
                   P-31, Chenab Market, Madina Town, Faisalabad, Punjab, Pakistan
                 </span>
@@ -221,7 +201,6 @@ function ContactPage() {
             </motion.div>
           </address>
 
-          {/* Dedicated Assurance Card */}
           <div className="contact-assurance-card">
             <div className="contact-assurance-card__icon">
               <ShieldCheck size={20} aria-hidden="true" />
@@ -244,7 +223,6 @@ function ContactPage() {
           onMouseMove={handleCardMouseMove}
           onMouseLeave={handleCardMouseLeave}
         >
-          {/* Subtle top accent glowing line */}
           <div className="contact-form-panel__top-accent" aria-hidden="true" />
 
           <div className="contact-form-panel__heading">
@@ -266,7 +244,7 @@ function ContactPage() {
                   name="fullName"
                   type="text"
                   autoComplete="name"
-                  placeholder="e.g. Tariq Awan"
+                  placeholder="Enter your name"
                   minLength={2}
                   maxLength={100}
                   required
@@ -282,28 +260,11 @@ function ContactPage() {
                   name="email"
                   type="email"
                   autoComplete="email"
-                  placeholder="name@company.com"
+                  placeholder="Enter your email"
                   maxLength={254}
                   required
                 />
               </div>
-            </div>
-
-            <div className="contact-form__field">
-              <label htmlFor="contact-service">Service of Interest</label>
-              <select
-                id="contact-service"
-                name="service"
-                value={service}
-                onChange={(event) => setService(event.target.value)}
-              >
-                <option value="">General Logistics Enquiry</option>
-                {services.map((item) => (
-                  <option value={item.title} key={item.title}>
-                    {item.title}
-                  </option>
-                ))}
-              </select>
             </div>
 
             <div className="contact-form__field">
@@ -314,7 +275,7 @@ function ContactPage() {
                 id="contact-subject"
                 name="subject"
                 type="text"
-                placeholder="e.g. Sea freight quotation to Europe"
+                placeholder="Enter a subject"
                 maxLength={180}
               />
             </div>
@@ -327,7 +288,7 @@ function ContactPage() {
                 id="contact-message"
                 name="message"
                 rows="5"
-                placeholder="Describe your cargo, origin, destination, and timeline requirements..."
+                placeholder="Enter your message"
                 minLength={10}
                 maxLength={5000}
                 required

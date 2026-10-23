@@ -5,22 +5,34 @@ import './Header.css'
 
 const navigationLinks = [
   { label: 'Home', href: '/' },
-  { label: 'About', href: '/about' },
+  { label: 'About Us', href: '/about' },
   { label: 'Services', href: '/services' },
   { label: 'Contact', href: '/contact' },
 ]
 
+function currentPath() {
+  return window.location.pathname.replace(/\/+$/, '') || '/'
+}
+
 function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [pathname, setPathname] = useState(currentPath)
   const prefersReducedMotion = useReducedMotion()
 
   useEffect(() => {
     const updateHeader = () => setIsScrolled(window.scrollY > 32)
+    const updatePath = () => {
+      setPathname(currentPath())
+    }
 
     updateHeader()
     window.addEventListener('scroll', updateHeader, { passive: true })
-    return () => window.removeEventListener('scroll', updateHeader)
+    window.addEventListener('popstate', updatePath)
+    return () => {
+      window.removeEventListener('scroll', updateHeader)
+      window.removeEventListener('popstate', updatePath)
+    }
   }, [])
 
   useEffect(() => {

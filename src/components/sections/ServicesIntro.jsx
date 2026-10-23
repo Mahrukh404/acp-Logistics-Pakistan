@@ -147,12 +147,14 @@ function ServicesIntro() {
             aria-live="polite"
             aria-atomic="true"
           >
-            <span className="services-intro__number">
-              {formatSlideNumber(activeIndex + 1)}
-            </span>
-            <h2 className="services-intro__title" id="services-intro-title">
-              {activeService.title}
-            </h2>
+            <div className="services-intro__heading-group">
+              <span className="services-intro__number">
+                {formatSlideNumber(activeIndex + 1)}
+              </span>
+              <h2 className="services-intro__title" id="services-intro-title">
+                {activeService.title}
+              </h2>
+            </div>
             <p className="services-intro__description">
               {activeService.description}
             </p>

@@ -47,6 +47,7 @@
 
 /* Paragraph Justification across About Us Page */
 .about-page p {
+  font-family: var(--font-body);
   text-align: justify;
   text-justify: inter-word;
 }
@@ -285,6 +286,7 @@
 
 .about-hero__narrative-body p {
   color: rgba(255, 255, 255, 0.88);
+  font-family: var(--font-body);
   font-size: clamp(14px, 1.1vw, 16px);
   font-weight: 400;
   line-height: 1.7;
@@ -378,6 +380,7 @@
 
 .about-why__header-desc {
   color: rgba(244, 246, 243, 0.84);
+  font-family: var(--font-body);
   font-size: clamp(15px, 1.2vw, 18px);
   line-height: 1.7;
   margin: 0;
@@ -507,6 +510,7 @@
 
 .about-reason-bar__desc {
   color: var(--about-body);
+  font-family: var(--font-body);
   font-size: clamp(14px, 1.08vw, 15px);
   line-height: 1.7;
   max-width: 900px;
@@ -680,6 +684,7 @@
 
 .about-goal-card__paragraph {
   color: var(--about-navy-deep);
+  font-family: var(--font-body);
   font-size: clamp(14px, 1.1vw, 16px);
   font-weight: 600;
   line-height: 1.58;
@@ -723,16 +728,15 @@
 
 .about-commitment__layout {
   display: grid;
-  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-  gap: clamp(36px, 5.5vw, 84px);
-  align-items: flex-start;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: clamp(48px, 6vw, 96px);
+  align-items: center;
   width: 100%;
 }
 
 .about-commitment__left {
   position: relative;
   min-width: 0;
-  width: 100%;
   perspective: 1000px;
 }
 
@@ -740,10 +744,10 @@
   display: flex;
   flex-direction: column;
   color: var(--about-navy);
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: clamp(48px, 6vw, 88px);
+  font-family: 'Oswald', 'Barlow Condensed', sans-serif;
+  font-size: clamp(100px, 7.4vw, 112px);
   font-weight: 800;
-  line-height: 0.88;
+  line-height: 0.9;
   letter-spacing: -0.025em;
   text-transform: uppercase;
   margin: 0;
@@ -754,6 +758,7 @@
 .about-commitment__title-word {
   display: block;
   max-width: 100%;
+  white-space: nowrap;
   transform-style: preserve-3d;
   will-change: transform, opacity;
 }
@@ -762,32 +767,24 @@
   position: relative;
   min-width: 0;
   width: 100%;
-  padding-top: 6px;
-}
-
-.about-commitment__rule {
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(90deg, var(--about-navy) 0%, rgba(11, 38, 60, 0.15) 75%, transparent 100%);
-  margin-bottom: clamp(24px, 3.5vw, 40px);
 }
 
 .about-commitment__scroll-text-wrap {
   display: flex;
   flex-direction: column;
   gap: clamp(28px, 3.5vw, 44px);
-  margin-bottom: clamp(28px, 3.5vw, 48px);
   width: 100%;
+  max-width: 900px;
 }
 
 /* Alphabet-by-Alphabet Scroll Fill Styling — OSWALD FONT (Reference Design) */
 .about-commitment__scroll-text,
 .about-commitment__secondary-text {
   font-family: 'Oswald', 'Barlow Condensed', sans-serif;
-  font-size: clamp(22px, 2.7vw, 38px);
-  font-weight: 600;
-  line-height: 1.22;
-  letter-spacing: 0.01em;
+  font-size: clamp(46px, 3.4vw, 52px);
+  font-weight: 700;
+  line-height: 1.06;
+  letter-spacing: -0.025em;
   text-transform: uppercase;
   margin: 0;
   text-align: left;
@@ -809,22 +806,6 @@
 
 .about-commitment__space {
   display: inline;
-}
-
-.about-commitment__footer-action {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 24px;
-  padding-top: 10px;
-}
-
-.about-commitment__verify-tag {
-  color: #7b889d;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
 }
 
 /* ==========================================================================
@@ -914,28 +895,25 @@
 
 .about-fact-card__number-wrap {
   position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: clamp(88px, 10vw, 128px);
   margin: 12px 0 24px;
 }
 
-.about-fact-value {
+.about-fact-value,
+.about-fact-value--support,
+.about-fact-value--global,
+.about-fact-value--counter {
+  display: flex;
+  align-items: flex-end;
   color: #ffffff !important;
   font-family: 'Barlow Condensed', sans-serif;
-  font-size: clamp(80px, 11vw, 156px);
+  font-size: clamp(64px, 8.2vw, 112px);
   font-weight: 700;
   line-height: 0.84;
   letter-spacing: -0.04em;
   white-space: nowrap;
-}
-
-.about-fact-value--support {
-  letter-spacing: -0.03em;
-}
-
-/* "GLOBAL" in Pure White */
-.about-fact-value--global {
-  font-size: clamp(52px, 7vw, 98px);
-  color: #ffffff !important;
-  letter-spacing: -0.02em;
 }
 
 .about-fact-card__content {
@@ -955,6 +933,7 @@
 
 .about-fact-card__desc {
   color: rgba(244, 246, 243, 0.88);
+  font-family: var(--font-body);
   font-size: clamp(13px, 1.05vw, 15px);
   line-height: 1.55;
   margin: 0;
@@ -1001,11 +980,22 @@
   .about-commitment__layout {
     grid-template-columns: 1fr;
     gap: 36px;
+    align-items: start;
   }
 
   .about-commitment__title {
     flex-direction: column;
     gap: 0;
+    font-size: clamp(64px, 9vw, 80px);
+    line-height: 0.9;
+    letter-spacing: -0.025em;
+  }
+
+  .about-commitment__scroll-text,
+  .about-commitment__secondary-text {
+    font-size: clamp(30px, 4.2vw, 38px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
   }
 }
 
@@ -1086,13 +1076,26 @@
     padding: 32px 24px;
   }
 
-  .about-fact-value {
-    font-size: clamp(72px, 20vw, 110px);
+  .about-fact-value,
+  .about-fact-value--support,
+  .about-fact-value--global,
+  .about-fact-value--counter {
+    font-size: clamp(64px, 16vw, 96px);
   }
 
   .about-commitment__title {
     flex-direction: column;
     gap: 0;
+    font-size: clamp(44px, 12vw, 56px);
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+  }
+
+  .about-commitment__scroll-text,
+  .about-commitment__secondary-text {
+    font-size: clamp(22px, 5.4vw, 28px);
+    line-height: 1.08;
+    letter-spacing: -0.015em;
   }
 }
 
