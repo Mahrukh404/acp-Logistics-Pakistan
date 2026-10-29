@@ -123,7 +123,7 @@ function ContactPage() {
         <h1>Contact Us</h1>
         <p className="contact-page__intro-lead">
           Tell us what you’re moving and how we can help. Our team coordinates across international
-          borders to deliver dependable, tailored freight solutions for your business.
+          borders to deliver dependable Solutions for your business.
         </p>
       </motion.header>
 
