@@ -65,16 +65,21 @@
   display: block;
   width: min(100%, 920px);
   margin-inline: auto;
+  text-align: center;
 }
 
 .ceo-quote__copy {
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .ceo-quote__attribution {
   display: grid;
   gap: 4px;
   margin-top: 22px;
+  justify-items: center;
 }
 
 .ceo-quote__attribution strong {
@@ -106,7 +111,7 @@
 .ceo-quote__mark {
   display: flex;
   width: fit-content;
-  margin-bottom: 14px;
+  margin: 0 auto 14px;
   padding: 10px 12px;
   border-radius: 12px;
   background: var(--ceo-navy);
@@ -122,14 +127,15 @@
 }
 
 .ceo-quote__text {
-  max-width: 38ch;
-  margin: 0;
+  max-width: 52ch;
+  margin: 0 auto;
   color: #0f2424;
   font-family: 'DM Sans', 'Segoe UI', sans-serif;
   font-size: clamp(20px, 2.15vw, 28px);
   font-weight: 500;
   line-height: 1.55;
   letter-spacing: 0;
+  text-align: center;
   text-wrap: pretty;
 }
 
@@ -167,7 +173,9 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
-  margin-top: 28px;
+  width: 100%;
+  max-width: 720px;
+  margin: 28px auto 0;
 }
 
 .ceo-quote__stat {
@@ -221,13 +229,6 @@
 @media (max-width: 900px) {
   .ceo-quote__inner {
     width: min(100%, 100%);
-    text-align: center;
-  }
-
-  .ceo-quote__mark,
-  .ceo-quote__text,
-  .ceo-quote__attribution {
-    margin-inline: auto;
   }
 
   .ceo-quote__text {
@@ -236,6 +237,7 @@
 
   .ceo-quote__stats {
     grid-template-columns: 1fr;
+    max-width: 420px;
   }
 }
 

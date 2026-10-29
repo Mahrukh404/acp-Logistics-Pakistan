@@ -92,24 +92,6 @@ const COMMITMENT_PARAGRAPH_1 =
 const COMMITMENT_PARAGRAPH_2 =
   'We are committed to ensuring safe cargo handling, efficient global transportation and door-to-door solutions through every step of the logistics journey.'
 
-// Helper function to split paragraph text into word wrappers with individual character spans
-// Preserves normal word-wrapping, accessibility, and allows smooth GSAP scroll scrub per alphabet
-function renderFillText(text) {
-  const words = text.split(' ')
-  return words.map((word, wordIndex) => (
-    <span key={wordIndex} className="about-commitment__word">
-      {word.split('').map((char, charIndex) => (
-        <span key={charIndex} className="about-commitment__char">
-          {char}
-        </span>
-      ))}
-      {wordIndex < words.length - 1 ? (
-        <span className="about-commitment__space">&nbsp;</span>
-      ) : null}
-    </span>
-  ))
-}
-
 function AboutPage() {
   const pageRef = useRef(null)
   const videoRef = useRef(null)
@@ -234,58 +216,24 @@ function AboutPage() {
         },
       )
 
-      // 4. Our Commitment — heading + body, then scroll letter fill
+      // 4. Our Commitment — same soft entrance as CEO message
       const commitSection = page.querySelector('.about-commitment')
-      const commitHeadingWords = page.querySelectorAll('.about-commitment__title-word')
-      const commitRightElements = page.querySelectorAll('.about-commitment__enter')
-      const chars = page.querySelectorAll('.about-commitment__char')
+      const commitBits = page.querySelectorAll('.about-commitment__anim')
 
-      if (commitSection && commitHeadingWords.length > 0) {
-        gsap.from(commitHeadingWords, {
-          y: 40,
-          duration: 0.85,
-          stagger: 0.14,
-          ease: 'power3.out',
-          clearProps: 'transform',
-          scrollTrigger: {
-            trigger: commitSection,
-            start: 'top 82%',
-            once: true,
-          },
-        })
-      }
-
-      if (commitSection && commitRightElements.length > 0) {
-        gsap.from(commitRightElements, {
+      if (commitSection && commitBits.length > 0) {
+        gsap.from(commitBits, {
           y: 28,
-          duration: 0.75,
+          autoAlpha: 0,
+          duration: 0.7,
           stagger: 0.12,
-          ease: 'power2.out',
-          clearProps: 'transform',
+          ease: 'power3.out',
+          clearProps: 'transform,visibility,opacity',
           scrollTrigger: {
             trigger: commitSection,
-            start: 'top 82%',
+            start: 'top 88%',
             once: true,
           },
         })
-      }
-
-      if (commitSection && chars.length > 0) {
-        gsap.fromTo(
-          chars,
-          { color: 'rgba(11, 38, 60, 0.28)' },
-          {
-            color: '#0b263c',
-            stagger: { each: 0.012, from: 'start' },
-            ease: 'none',
-            scrollTrigger: {
-              trigger: commitSection,
-              start: 'top 70%',
-              end: 'bottom 75%',
-              scrub: 0.7,
-            },
-          },
-        )
       }
 
       // 5. Facts About Us Cards (Placed AFTER Our Commitment)
@@ -623,32 +571,25 @@ function AboutPage() {
         id="about-commitment"
         aria-labelledby="about-commitment-title"
       >
-        <div className="about-commitment__container">
-          <div className="about-commitment__layout">
-            <div className="about-commitment__left">
-              <h2 id="about-commitment-title" className="about-commitment__title">
-                <span className="about-commitment__title-word">Our</span>
-                <span className="about-commitment__title-word">Commitment</span>
-              </h2>
-            </div>
+        <div className="about-commitment__glow" aria-hidden="true" />
+        <div className="about-commitment__orb about-commitment__orb--one" aria-hidden="true" />
+        <div className="about-commitment__orb about-commitment__orb--two" aria-hidden="true" />
 
-            <div className="about-commitment__right">
-              <div className="about-commitment__scroll-text-wrap about-commitment__enter">
-                <p
-                  className="about-commitment__scroll-text"
-                  aria-label={COMMITMENT_PARAGRAPH_1}
-                >
-                  {renderFillText(COMMITMENT_PARAGRAPH_1)}
-                </p>
-                <p
-                  className="about-commitment__secondary-text"
-                  aria-label={COMMITMENT_PARAGRAPH_2}
-                >
-                  {renderFillText(COMMITMENT_PARAGRAPH_2)}
-                </p>
-              </div>
-            </div>
-          </div>
+        <div className="about-commitment__inner">
+          <h2
+            id="about-commitment-title"
+            className="about-commitment__title about-commitment__anim"
+          >
+            Our Commitment
+          </h2>
+
+          <p className="about-commitment__lead about-commitment__anim">
+            {COMMITMENT_PARAGRAPH_1}
+          </p>
+
+          <p className="about-commitment__body about-commitment__anim">
+            {COMMITMENT_PARAGRAPH_2}
+          </p>
         </div>
       </section>
 
