@@ -62,64 +62,23 @@
 .ceo-quote__inner {
   position: relative;
   z-index: 1;
-  display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(220px, 0.78fr);
-  gap: clamp(32px, 5vw, 72px);
-  align-items: center;
-  width: min(100%, 1240px);
+  display: block;
+  width: min(100%, 920px);
   margin-inline: auto;
 }
 
-.ceo-quote__portrait {
-  margin: 0;
-  width: min(100%, 420px);
-  justify-self: end;
+.ceo-quote__copy {
+  min-width: 0;
 }
 
-.ceo-quote__portrait-frame {
-  position: relative;
-  overflow: hidden;
-  aspect-ratio: 1 / 1;
-  border-radius: 22px;
-  border: 1px solid rgba(21, 43, 43, 0.1);
-  box-shadow: 0 18px 42px rgba(10, 28, 29, 0.12);
-  background: #e8ece7;
-}
-
-.ceo-quote__portrait-frame::after {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background: linear-gradient(
-    180deg,
-    transparent 42%,
-    rgba(5, 16, 26, 0.55) 72%,
-    rgba(5, 16, 26, 0.88) 100%
-  );
-  content: '';
-  pointer-events: none;
-}
-
-.ceo-quote__portrait-img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center center;
-}
-
-.ceo-quote__ceo-tag {
-  position: absolute;
-  z-index: 2;
-  right: 18px;
-  bottom: 18px;
-  left: 18px;
+.ceo-quote__attribution {
   display: grid;
   gap: 4px;
+  margin-top: 22px;
 }
 
-.ceo-quote__ceo-tag strong {
-  color: #fff;
+.ceo-quote__attribution strong {
+  color: var(--ceo-navy);
   font-family: 'DM Sans', sans-serif;
   font-size: clamp(18px, 2vw, 22px);
   font-weight: 700;
@@ -127,16 +86,12 @@
   letter-spacing: 0;
 }
 
-.ceo-quote__ceo-tag span {
-  color: rgba(244, 246, 243, 0.82);
+.ceo-quote__attribution span {
+  color: rgba(15, 36, 36, 0.68);
   font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.02em;
-}
-
-.ceo-quote__copy {
-  min-width: 0;
 }
 
 .ceo-quote__eyebrow {
@@ -265,32 +220,18 @@
 
 @media (max-width: 900px) {
   .ceo-quote__inner {
-    grid-template-columns: 1fr;
-    gap: 28px;
-    justify-items: center;
+    width: min(100%, 100%);
     text-align: center;
   }
 
-  .ceo-quote__portrait {
-    width: min(100%, 380px);
-    justify-self: center;
-  }
-
-  .ceo-quote__copy {
-    width: 100%;
-  }
-
   .ceo-quote__mark,
-  .ceo-quote__text {
+  .ceo-quote__text,
+  .ceo-quote__attribution {
     margin-inline: auto;
   }
 
   .ceo-quote__text {
     max-width: 100%;
-  }
-
-  .ceo-quote__ceo-tag {
-    text-align: left;
   }
 
   .ceo-quote__stats {
@@ -303,19 +244,9 @@
     padding: 64px 20px 72px;
   }
 
-  .ceo-quote__portrait {
-    width: min(100%, 100%);
-  }
-
   .ceo-quote__text {
     font-size: clamp(18px, 5.2vw, 22px);
     line-height: 1.6;
-  }
-
-  .ceo-quote__ceo-tag {
-    right: 14px;
-    bottom: 14px;
-    left: 14px;
   }
 }
 

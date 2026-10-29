@@ -80,6 +80,11 @@ function CEOQuote() {
             {quoteText}
           </blockquote>
 
+          <div className="ceo-quote__attribution ceo-quote__anim">
+            <strong id="ceo-quote-name">Shahzad Awan</strong>
+            <span>CEO, ACP Logistics</span>
+          </div>
+
           <div className="ceo-quote__stats" aria-label="Company highlights">
             <div className="ceo-quote__stat">
               <strong>2005</strong>
@@ -95,24 +100,6 @@ function CEOQuote() {
             </div>
           </div>
         </div>
-
-        <figure className="ceo-quote__portrait ceo-quote__anim">
-          <div className="ceo-quote__portrait-frame">
-            <img
-              className="ceo-quote__portrait-img"
-              src="/images/ceo-shahzad-awan.png"
-              alt="Shahzad Awan, CEO of ACP Logistics"
-              width={559}
-              height={550}
-              loading="lazy"
-              decoding="async"
-            />
-            <div className="ceo-quote__ceo-tag">
-              <strong id="ceo-quote-name">Shahzad Awan</strong>
-              <span>CEO, ACP Logistics</span>
-            </div>
-          </div>
-        </figure>
       </div>
     </section>
   )
