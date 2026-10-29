@@ -7,6 +7,7 @@ const HomePage = lazy(() => import('./pages/HomePage.jsx'))
 const AboutPage = lazy(() => import('./pages/AboutPage.jsx'))
 const ServicesPage = lazy(() => import('./pages/ServicesPage.jsx'))
 const ContactPage = lazy(() => import('./pages/ContactPage.jsx'))
+const PrivacyPage = lazy(() => import('./pages/PrivacyPage.jsx'))
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -54,12 +55,21 @@ function App() {
   )
 
   useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual'
+    }
+    window.scrollTo(0, 0)
+
     const updatePath = () =>
       setPathname(window.location.pathname.replace(/\/+$/, '') || '/')
 
     window.addEventListener('popstate', updatePath)
     return () => window.removeEventListener('popstate', updatePath)
   }, [])
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
 
   const page =
     pathname === '/about' ? (
@@ -68,6 +78,8 @@ function App() {
       <ServicesPage />
     ) : pathname === '/contact' ? (
       <ContactPage />
+    ) : pathname === '/privacy' ? (
+      <PrivacyPage />
     ) : pathname === '/' ? (
       <HomePage />
     ) : (
@@ -89,9 +101,9 @@ function App() {
           }
         >
           {page}
+          <Footer />
         </Suspense>
       </ErrorBoundary>
-      <Footer />
     </>
   )
 }

@@ -10,31 +10,6 @@ import { ArrowDown, ArrowRight } from 'lucide-react'
 import { gsap } from '../../animations/gsap.js'
 import './Hero.css'
 
-const heroContent = {
-  hidden: {},
-  visible: (reduceMotion) => ({
-    transition: {
-      delayChildren: reduceMotion ? 0 : 0.12,
-      staggerChildren: reduceMotion ? 0 : 0.16,
-    },
-  }),
-}
-
-const heroItem = {
-  hidden: (reduceMotion) => ({
-    opacity: 0,
-    y: reduceMotion ? 0 : 18,
-  }),
-  visible: (reduceMotion) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: reduceMotion ? 0 : 0.7,
-      ease: [0.22, 0.68, 0, 1],
-    },
-  }),
-}
-
 function Hero() {
   const sectionRef = useRef(null)
   const scrollContentRef = useRef(null)
@@ -47,9 +22,40 @@ function Hero() {
   const contentY = useTransform(smoothY, [-0.5, 0.5], [-3, 3])
 
   useLayoutEffect(() => {
-    if (prefersReducedMotion) return undefined
+    const section = sectionRef.current
+    if (!section) return undefined
+
+    const animItems = section.querySelectorAll('.hero-anim')
+    const scrollCue = section.querySelector('.hero-section__scroll')
+
+    if (prefersReducedMotion) {
+      gsap.set([animItems, scrollCue], { clearProps: 'visibility,opacity,transform' })
+      return undefined
+    }
 
     const context = gsap.context(() => {
+      const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+
+      heroTl
+        .from(animItems, {
+          autoAlpha: 0,
+          y: 35,
+          duration: 0.85,
+          stagger: 0.14,
+          clearProps: 'transform',
+        })
+        .from(
+          scrollCue,
+          {
+            autoAlpha: 0,
+            y: 16,
+            duration: 0.6,
+            ease: 'power2.out',
+            clearProps: 'transform',
+          },
+          '-=0.35',
+        )
+
       gsap.fromTo(
         scrollContentRef.current,
         { y: 0 },
@@ -57,7 +63,7 @@ function Hero() {
           y: () => (window.innerWidth <= 640 ? -72 : -118),
           ease: 'none',
           scrollTrigger: {
-            trigger: sectionRef.current,
+            trigger: section,
             start: 'top top',
             end: () =>
               window.innerWidth <= 640 ? 'bottom 25%' : 'bottom top',
@@ -66,9 +72,12 @@ function Hero() {
           },
         },
       )
-    }, sectionRef)
+    }, section)
 
-    return () => context.revert()
+    return () => {
+      context.revert()
+      gsap.set([animItems, scrollCue], { clearProps: 'visibility,opacity,transform' })
+    }
   }, [prefersReducedMotion])
 
   const handlePointerMove = (event) => {
@@ -98,43 +107,20 @@ function Hero() {
       <div className="hero-section__scroll-content" ref={scrollContentRef}>
         <motion.div
           className="hero-section__content"
-          variants={heroContent}
-          initial="hidden"
-          animate="visible"
-          custom={prefersReducedMotion}
           style={prefersReducedMotion ? undefined : { x: contentX, y: contentY }}
         >
-          <motion.p
-            className="hero-section__eyebrow"
-            variants={heroItem}
-            custom={prefersReducedMotion}
-          >
-            ACP Logistics
-          </motion.p>
+          <p className="hero-section__statement hero-anim">ACP Logistics</p>
 
-          <motion.h1
-            className="hero-section__title"
-            id="hero-title"
-            variants={heroItem}
-            custom={prefersReducedMotion}
-          >
+          <h1 className="hero-section__title hero-anim" id="hero-title">
             Freight Forwarding
             <br />&amp; Global Cargo Solutions
-          </motion.h1>
+          </h1>
 
-          <motion.p
-            className="hero-section__description"
-            variants={heroItem}
-            custom={prefersReducedMotion}
-          >
+          <p className="hero-section__tagline hero-anim">
             Across Borders, Beyond Expectations
-          </motion.p>
+          </p>
 
-          <motion.div
-            className="hero-section__actions"
-            variants={heroItem}
-            custom={prefersReducedMotion}
-          >
+          <div className="hero-section__actions hero-anim">
             <a className="hero-button hero-button--primary" href="/services">
               Explore Our Services
               <ArrowRight aria-hidden="true" size={17} strokeWidth={1.8} />
@@ -143,7 +129,7 @@ function Hero() {
               Get a Quote
               <ArrowRight aria-hidden="true" size={17} strokeWidth={1.8} />
             </a>
-          </motion.div>
+          </div>
         </motion.div>
       </div>
 

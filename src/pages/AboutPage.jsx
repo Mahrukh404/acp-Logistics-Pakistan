@@ -87,10 +87,10 @@ const facts = [
 ]
 
 const COMMITMENT_PARAGRAPH_1 =
-  'TO DELIVER RELIABLE, CUSTOMER-FOCUSED LOGISTICS SOLUTIONS BUILT ON TRUST, TRANSPARENCY AND PROFESSIONAL EXCELLENCE.'
+  'To deliver reliable, customer-focused logistics solutions built on trust, transparency and professional excellence.'
 
 const COMMITMENT_PARAGRAPH_2 =
-  'WE ARE COMMITTED TO ENSURING SAFE CARGO HANDLING, EFFICIENT GLOBAL TRANSPORTATION AND DOOR TO DOOR SOLUTIONS THROUGH EVERY STEP OF THE LOGISTICS JOURNEY.'
+  'We are committed to ensuring safe cargo handling, efficient global transportation and door-to-door solutions through every step of the logistics journey.'
 
 // Helper function to split paragraph text into word wrappers with individual character spans
 // Preserves normal word-wrapping, accessibility, and allows smooth GSAP scroll scrub per alphabet
@@ -234,78 +234,57 @@ function AboutPage() {
         },
       )
 
-      // 4. Our Commitment — Dramatic 3D Heading Entrance
+      // 4. Our Commitment — heading + body, then scroll letter fill
+      const commitSection = page.querySelector('.about-commitment')
       const commitHeadingWords = page.querySelectorAll('.about-commitment__title-word')
-      if (commitHeadingWords.length > 0) {
-        gsap.fromTo(
-          commitHeadingWords,
-          {
-            autoAlpha: 0,
-            y: 50,
-            rotateX: 35,
-            transformOrigin: '0% 50%',
-          },
-          {
-            autoAlpha: 1,
-            y: 0,
-            rotateX: 0,
-            duration: 1,
-            stagger: 0.15,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: '.about-commitment',
-              start: 'top 78%',
-              once: true,
-            },
-          },
-        )
-      }
-
-      // Initial Right-Column Entrance Animation
       const commitRightElements = page.querySelectorAll('.about-commitment__enter')
-      if (commitRightElements.length > 0) {
-        gsap.fromTo(
-          commitRightElements,
-          {
-            autoAlpha: 0,
-            y: 35,
+      const chars = page.querySelectorAll('.about-commitment__char')
+
+      if (commitSection && commitHeadingWords.length > 0) {
+        gsap.from(commitHeadingWords, {
+          autoAlpha: 0,
+          y: 40,
+          duration: 0.85,
+          stagger: 0.14,
+          ease: 'power3.out',
+          clearProps: 'transform',
+          scrollTrigger: {
+            trigger: commitSection,
+            start: 'top 82%',
+            once: true,
           },
-          {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.85,
-            stagger: 0.12,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: '.about-commitment',
-              start: 'top 78%',
-              once: true,
-            },
-          },
-        )
+        })
       }
 
-      // Scroll-Driven Alphabet-by-Alphabet Text Fill Sequence
-      // Sweeps through characters from translucent base tone to exact footer color #0b263c
-      const chars = page.querySelectorAll('.about-commitment__char')
-      if (chars.length > 0) {
+      if (commitSection && commitRightElements.length > 0) {
+        gsap.from(commitRightElements, {
+          autoAlpha: 0,
+          y: 28,
+          duration: 0.75,
+          stagger: 0.12,
+          ease: 'power2.out',
+          clearProps: 'transform',
+          scrollTrigger: {
+            trigger: commitSection,
+            start: 'top 82%',
+            once: true,
+          },
+        })
+      }
+
+      if (commitSection && chars.length > 0) {
         gsap.fromTo(
           chars,
-          {
-            color: 'rgba(11, 38, 60, 0.22)',
-          },
+          { color: 'rgba(11, 38, 60, 0.28)' },
           {
             color: '#0b263c',
-            stagger: {
-              each: 0.015,
-              from: 'start',
-            },
+            stagger: { each: 0.012, from: 'start' },
             ease: 'none',
             scrollTrigger: {
-              trigger: '.about-commitment',
-              start: 'top 68%',
-              end: 'bottom 82%',
-              scrub: 0.8,
+              trigger: commitSection,
+              start: 'top 70%',
+              end: 'bottom 75%',
+              scrub: 0.7,
             },
           },
         )
@@ -648,15 +627,17 @@ function AboutPage() {
       >
         <div className="about-commitment__container">
           <div className="about-commitment__layout">
-            {/* Left Column: Stacked Heading with 3D Entrance (No Overlap) */}
             <div className="about-commitment__left">
+              <p className="about-commitment__eyebrow about-commitment__enter">
+                Promise in motion
+              </p>
               <h2 id="about-commitment-title" className="about-commitment__title">
-                <span className="about-commitment__title-word">OUR</span>
-                <span className="about-commitment__title-word">COMMITMENT</span>
+                <span className="about-commitment__title-word">Our</span>
+                <span className="about-commitment__title-word">Commitment</span>
               </h2>
+              <div className="about-commitment__accent about-commitment__enter" aria-hidden="true" />
             </div>
 
-            {/* Right Column: Scroll-Driven Character-by-Character Fill */}
             <div className="about-commitment__right">
               <div className="about-commitment__scroll-text-wrap about-commitment__enter">
                 <p

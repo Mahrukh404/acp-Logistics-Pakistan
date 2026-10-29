@@ -1,6 +1,4 @@
-import { useRef } from 'react'
-import { ArrowUpRight, Mail, Phone } from 'lucide-react'
-import { motion, useInView, useReducedMotion } from 'motion/react'
+import { ArrowUpRight, Mail, MapPin, MessageCircle, Phone } from 'lucide-react'
 import './Footer.css'
 
 const footerLinks = [
@@ -10,51 +8,32 @@ const footerLinks = [
   { label: 'Contact', href: '/contact' },
 ]
 
+const legalLinks = [
+  { label: 'Privacy Policy', href: '/privacy' },
+  { label: 'Terms of Use', href: '/privacy#terms' },
+]
+
 function Footer() {
-  const footerRef = useRef(null)
-  const isInView = useInView(footerRef, { once: true, amount: 0.12 })
-  const prefersReducedMotion = useReducedMotion()
-
   const handleNavClick = (event, href) => {
-    if (href.startsWith('/') && !href.startsWith('//') && !href.includes('#')) {
-      event.preventDefault()
-      window.history.pushState(null, '', href)
-      window.dispatchEvent(new Event('popstate'))
-      window.scrollTo(0, 0)
+    if (!href.startsWith('/') || href.startsWith('//')) return
+
+    event.preventDefault()
+    const [, hash] = href.split('#')
+    window.history.pushState(null, '', href)
+    window.dispatchEvent(new Event('popstate'))
+
+    if (hash) {
+      requestAnimationFrame(() => {
+        document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth' })
+      })
+      return
     }
-  }
 
-  // Motion variants for smooth staggered column entrance
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: prefersReducedMotion ? 0 : 0.12,
-        delayChildren: 0.08,
-      },
-    },
-  }
-
-  const columnVariants = {
-    hidden: { opacity: 0, y: 22 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: prefersReducedMotion ? 0 : 0.75,
-        ease: [0.16, 1, 0.3, 1],
-      },
-    },
+    window.scrollTo(0, 0)
   }
 
   return (
-    <footer
-      className="site-footer"
-      ref={footerRef}
-      aria-labelledby="site-footer-title"
-    >
-      {/* Background Video Layer */}
+    <footer className="site-footer" aria-labelledby="site-footer-title">
       <div className="site-footer__video-layer" aria-hidden="true">
         <video
           className="site-footer__video"
@@ -71,18 +50,11 @@ function Footer() {
         <div className="site-footer__video-scrim" />
       </div>
 
-      {/* Top luminous decorative accent border */}
       <div className="site-footer__top-accent" aria-hidden="true" />
 
-      <motion.div
-        className="site-footer__inner"
-        variants={containerVariants}
-        initial="hidden"
-        animate={prefersReducedMotion || isInView ? 'visible' : 'hidden'}
-      >
+      <div className="site-footer__inner">
         <div className="site-footer__columns">
-          {/* Column 1: Clean ACP Brand Logo (No extra text or green box) */}
-          <motion.div className="site-footer__brand-column" variants={columnVariants}>
+          <div className="site-footer__brand-column">
             <a
               className="site-footer__brand"
               href="/"
@@ -97,15 +69,22 @@ function Footer() {
                 draggable="false"
               />
             </a>
-          </motion.div>
+            <p className="site-footer__tagline">
+              Freight forwarding and supply-chain solutions across Pakistan and
+              international trade lanes — reliable since 2005.
+            </p>
+            <a
+              className="site-footer__brand-cta"
+              href="/contact"
+              onClick={(e) => handleNavClick(e, '/contact')}
+            >
+              Request a Quote
+              <ArrowUpRight aria-hidden="true" size={15} strokeWidth={2} />
+            </a>
+          </div>
 
-          {/* Column 2: Navigation Links */}
-          <motion.nav
-            className="site-footer__navigation"
-            aria-label="Footer navigation"
-            variants={columnVariants}
-          >
-            <h2 className="site-footer__heading">Navigation</h2>
+          <nav className="site-footer__navigation" aria-label="Footer navigation">
+            <h2 className="site-footer__heading">Company</h2>
             <ul>
               {footerLinks.map(({ label, href }) => (
                 <li key={label}>
@@ -118,82 +97,85 @@ function Footer() {
                     <ArrowUpRight
                       className="site-footer__nav-arrow"
                       aria-hidden="true"
-                      size={14}
+                      size={13}
                       strokeWidth={2}
                     />
                   </a>
                 </li>
               ))}
             </ul>
-          </motion.nav>
+          </nav>
 
-          {/* Column 3: Contact */}
-          <motion.address className="site-footer__contact" variants={columnVariants}>
+          <div className="site-footer__contact">
             <h2 className="site-footer__heading">Contact</h2>
             <div className="site-footer__contact-items">
-              <div className="site-footer__contact-item">
+              <a className="site-footer__contact-item" href="mailto:Inquire@acplogs.com">
                 <span className="site-footer__contact-icon">
-                  <Mail size={15} aria-hidden="true" />
+                  <Mail size={14} aria-hidden="true" />
                 </span>
-                <span>Awan@acplogs.com</span>
-              </div>
-              <div className="site-footer__contact-item">
+                <span>Inquire@acplogs.com</span>
+              </a>
+              <a className="site-footer__contact-item" href="tel:+92418738133">
                 <span className="site-footer__contact-icon">
-                  <Phone size={15} aria-hidden="true" />
+                  <Phone size={14} aria-hidden="true" />
                 </span>
                 <span>+92-41-8738133</span>
-              </div>
+              </a>
+              <a
+                className="site-footer__contact-item"
+                href="https://wa.me/923009660045"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span className="site-footer__contact-icon">
+                  <MessageCircle size={14} aria-hidden="true" />
+                </span>
+                <span>WhatsApp: 03009660045</span>
+              </a>
             </div>
-          </motion.address>
+          </div>
 
-          {/* Column 4: Location */}
-          <motion.address className="site-footer__address" variants={columnVariants}>
-            <h2 className="site-footer__heading">Location</h2>
+          <address className="site-footer__address">
+            <h2 className="site-footer__heading">Head Office</h2>
             <div className="site-footer__address-box">
+              <span className="site-footer__contact-icon" aria-hidden="true">
+                <MapPin size={14} />
+              </span>
               <div className="site-footer__address-info">
                 <p>
                   P-31, Chenab Market, Madina Town, Faisalabad, Punjab, Pakistan
                 </p>
               </div>
             </div>
-          </motion.address>
-        </div>
-      </motion.div>
-
-      {/* Marquee signature banner */}
-      <div
-        className="site-footer__signature"
-        role="group"
-        aria-label="Start your Journey with acp Logistics Today."
-      >
-        <div className="site-footer__signature-track" aria-hidden="true">
-          {[0, 1].map((copy) => (
-            <div className="site-footer__signature-group" key={copy}>
-              <span className="site-footer__signature-lockup">
-                {[0, 1, 2, 3, 4].map((layer) => (
-                  <span
-                    className={`site-footer__signature-line site-footer__signature-line--${layer}`}
-                    key={layer}
-                  >
-                    <span>Start your Journey with</span>
-                    <strong>acp</strong>
-                    <span className="site-footer__signature-light">
-                      Logistics
-                    </span>
-                    <span>Today.</span>
-                  </span>
-                ))}
-              </span>
-            </div>
-          ))}
+          </address>
         </div>
       </div>
 
+      <div className="site-footer__divider" aria-hidden="true" />
+
       <div className="site-footer__bottom">
         <div className="site-footer__bottom-inner">
-          <p>© {new Date().getFullYear()} ACP Logistics LTD. All Rights Reserved.</p>
+          <p className="site-footer__copyright">
+            © {new Date().getFullYear()} ACP Logistics LTD. All rights reserved.
+          </p>
+
+          <nav className="site-footer__legal" aria-label="Legal">
+            {legalLinks.map(({ label, href }, index) => (
+              <span className="site-footer__legal-item" key={label}>
+                {index > 0 ? (
+                  <span className="site-footer__legal-sep" aria-hidden="true">
+                    ·
+                  </span>
+                ) : null}
+                <a href={href} onClick={(e) => handleNavClick(e, href)}>
+                  {label}
+                </a>
+              </span>
+            ))}
+          </nav>
+
           <p className="site-footer__legal-tag">
-            Operating Since 2005 • Pakistan & International Supply Chains
+            Operating since 2005 · Pakistan &amp; International Supply Chains
           </p>
         </div>
       </div>

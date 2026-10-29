@@ -768,6 +768,13 @@
     height: auto !important;
   }
 
+  /* Images must stay paint-visible so mobile browsers fetch them promptly */
+  .service-panel__image,
+  .service-panel__img {
+    opacity: 1;
+    visibility: visible;
+  }
+
   .service-hero {
     min-height: 90svh;
     padding: clamp(110px, 16vh, 160px) 24px clamp(50px, 8vh, 80px);

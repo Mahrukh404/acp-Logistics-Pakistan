@@ -1,4 +1,4 @@
-import { useCallback, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { ArrowUpRight } from 'lucide-react'
 import { gsap, ScrollTrigger } from '../animations/gsap.js'
 import services from '../data/services.js'
@@ -32,17 +32,6 @@ function getPanelIndexFromHash(hash) {
   return Number(match[1])
 }
 
-function renderWords(text) {
-  if (!text) return null
-  const words = text.split(' ')
-  return words.map((word, i) => (
-    <span className="service-word-wrap" key={i}>
-      <span className="service-word">{word}</span>
-      {i < words.length - 1 ? ' ' : ''}
-    </span>
-  ))
-}
-
 function ServicesPage() {
   const pageRef = useRef(null)
   const stageRef = useRef(null)
@@ -53,6 +42,7 @@ function ServicesPage() {
   const videoRef = useRef(null)
   const [videoError, setVideoError] = useState(false)
   const [activeSlide, setActiveSlide] = useState(1)
+  const [videoReady, setVideoReady] = useState(false)
 
   const handleImageMouseMove = useCallback((e) => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
@@ -73,85 +63,68 @@ function ServicesPage() {
     card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)'
   }, [])
 
+  // Load hero video after first paint so the page appears instantly
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (prefersReducedMotion) return undefined
+
+    const timer = window.setTimeout(() => setVideoReady(true), 150)
+    return () => window.clearTimeout(timer)
+  }, [])
+
   useLayoutEffect(() => {
     const page = pageRef.current
     const stage = stageRef.current
     const track = trackRef.current
     if (!page || !stage || !track) return undefined
 
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
     const ctx = gsap.context(() => {
       const media = gsap.matchMedia()
 
       // -------------------------------------------------------------
-      // 1. Universal Hero Entrance Animations (Smooth 3D Reveal)
+      // 1. Fast hero entrance — content stays visible (no hide-first)
       // -------------------------------------------------------------
-      const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } })
-      const heroWords = page.querySelectorAll('.service-hero__word')
-      const heroLine = page.querySelector('.service-hero__accent-line')
-      const heroSubtitle = page.querySelector('.service-hero__subtitle')
-      const heroBadge = page.querySelector('.service-hero__tag-strip')
+      if (!reduceMotion) {
+        const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+        const heroWords = page.querySelectorAll('.service-hero__word')
+        const heroLine = page.querySelector('.service-hero__accent-line')
+        const heroSubtitle = page.querySelector('.service-hero__subtitle')
+        const heroBadge = page.querySelector('.service-hero__tag-strip')
 
-      if (heroBadge) {
-        heroTl.fromTo(
-          heroBadge,
-          { autoAlpha: 0, y: -16 },
-          { autoAlpha: 1, y: 0, duration: 0.7, delay: 0.1 }
-        )
-      }
+        if (heroBadge) {
+          heroTl.from(heroBadge, { y: -12, duration: 0.45, clearProps: 'transform' })
+        }
 
-      if (heroWords.length > 0) {
-        heroTl.fromTo(
-          heroWords,
-          {
-            autoAlpha: 0,
-            y: 50,
-            rotateX: 45,
-            transformOrigin: '0% 50% -40px',
-          },
-          {
-            autoAlpha: 1,
-            y: 0,
-            rotateX: 0,
-            duration: 1.05,
-            stagger: 0.15,
-            ease: 'power3.out',
-          },
-          '-=0.4'
-        )
-      }
+        if (heroWords.length > 0) {
+          heroTl.from(
+            heroWords,
+            {
+              y: 28,
+              duration: 0.55,
+              stagger: 0.08,
+              clearProps: 'transform',
+            },
+            '-=0.2',
+          )
+        }
 
-      if (heroLine) {
-        heroTl.fromTo(
-          heroLine,
-          { scaleX: 0 },
-          { scaleX: 1, duration: 1.1, ease: 'expo.out' },
-          '-=0.55'
-        )
-      }
+        if (heroLine) {
+          heroTl.from(
+            heroLine,
+            { scaleX: 0, duration: 0.55, ease: 'expo.out', clearProps: 'transform' },
+            '-=0.3',
+          )
+        }
 
-      if (heroSubtitle) {
-        heroTl.fromTo(
-          heroSubtitle,
-          { autoAlpha: 0, y: 24, filter: 'blur(4px)' },
-          { autoAlpha: 1, y: 0, filter: 'blur(0px)', duration: 0.85, ease: 'power2.out' },
-          '-=0.5'
-        )
-      }
-
-      // Parallax on hero background video
-      const heroVideo = page.querySelector('.service-hero__video')
-      if (heroVideo) {
-        gsap.to(heroVideo, {
-          yPercent: 14,
-          scale: 1.06,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: '.service-hero',
-            start: 'top top',
-            end: 'bottom top',
-            scrub: true,
-          },
-        })
+        if (heroSubtitle) {
+          heroTl.from(
+            heroSubtitle,
+            { y: 16, duration: 0.45, clearProps: 'transform' },
+            '-=0.25',
+          )
+        }
       }
 
       // -------------------------------------------------------------
@@ -235,10 +208,9 @@ function ServicesPage() {
           if (heading) {
             gsap.fromTo(
               heading,
-              { y: 35, autoAlpha: 0.8 },
+              { y: 28 },
               {
                 y: 0,
-                autoAlpha: 1,
                 ease: 'power2.out',
                 scrollTrigger: {
                   trigger: stage,
@@ -262,26 +234,6 @@ function ServicesPage() {
                   start: () => `top+=${Math.max(0, (i - 0.8) * stage.clientWidth)} top`,
                   end: () => `top+=${i * stage.clientWidth} top`,
                   scrub: 1,
-                },
-              }
-            )
-          }
-
-          const words = panel.querySelectorAll('.service-word')
-          if (words.length > 0) {
-            gsap.fromTo(
-              words,
-              { opacity: 0.25, y: 4 },
-              {
-                opacity: 1,
-                y: 0,
-                ease: 'power1.out',
-                stagger: 0.02,
-                scrollTrigger: {
-                  trigger: stage,
-                  start: () => `top+=${Math.max(0, (i - 0.75) * stage.clientWidth)} top`,
-                  end: () => `top+=${(i - 0.15) * stage.clientWidth} top`,
-                  scrub: 0.6,
                 },
               }
             )
@@ -316,14 +268,6 @@ function ServicesPage() {
 
         window.addEventListener('resize', onResize)
 
-        const images = stage.querySelectorAll('img')
-        const refreshWhenReady = () => ScrollTrigger.refresh()
-        images.forEach((image) => {
-          if (image.complete) return
-          image.addEventListener('load', refreshWhenReady, { once: true })
-          image.addEventListener('error', refreshWhenReady, { once: true })
-        })
-
         requestAnimationFrame(() => {
           sizePanels()
           ScrollTrigger.refresh()
@@ -349,7 +293,7 @@ function ServicesPage() {
       })
 
       // -------------------------------------------------------------
-      // 3. Mobile / Tablet Stacked Transitions
+      // 3. Mobile — light motion only (never hide content)
       // -------------------------------------------------------------
       media.add('(max-width: 1024px) and (prefers-reduced-motion: no-preference)', () => {
         const panels = gsap.utils.toArray('[data-service-panel]', track)
@@ -358,110 +302,56 @@ function ServicesPage() {
           if (panel.dataset.panelType === 'intro') return
           const image = panel.querySelector('[data-service-image]')
           const copy = panel.querySelector('[data-service-copy]')
-          const number = panel.querySelector('.service-panel__number')
-          const title = panel.querySelector('.service-panel__title')
 
-          gsap.fromTo(
-            [image, number, title, copy].filter(Boolean),
-            { autoAlpha: 0, y: 35 },
-            {
-              autoAlpha: 1,
-              y: 0,
-              duration: 0.8,
-              stagger: 0.12,
+          if (image) {
+            gsap.from(image, {
+              y: 20,
+              duration: 0.55,
               ease: 'power3.out',
+              clearProps: 'transform',
               scrollTrigger: {
                 trigger: panel,
-                start: 'top 80%',
-                toggleActions: 'play none none reverse',
+                start: 'top 90%',
+                once: true,
               },
-            }
-          )
+            })
+          }
 
-          const words = panel.querySelectorAll('.service-word')
-          if (words.length > 0) {
-            gsap.fromTo(
-              words,
-              { opacity: 0.25, y: 4 },
-              {
-                opacity: 1,
-                y: 0,
-                duration: 0.45,
-                stagger: 0.018,
-                ease: 'power2.out',
-                scrollTrigger: {
-                  trigger: panel.querySelector('[data-service-copy]') || panel,
-                  start: 'top 75%',
-                  toggleActions: 'play none none reverse',
-                },
-              }
-            )
+          if (copy) {
+            gsap.from(copy, {
+              y: 16,
+              duration: 0.5,
+              ease: 'power3.out',
+              clearProps: 'transform',
+              scrollTrigger: {
+                trigger: panel,
+                start: 'top 90%',
+                once: true,
+              },
+            })
           }
         })
       })
 
-      // 4. Closing "Have a Shipment in Mind?" CTA Section
+      // 4. Closing CTA — visible by default, soft entrance only
       const closingSection = page.querySelector('.services-page__closing')
-      if (closingSection) {
-        const closingEyebrow = closingSection.querySelector('.services-page__closing-eyebrow')
-        const closingWords = closingSection.querySelectorAll('.closing-word')
-        const closingLead = closingSection.querySelector('.services-page__closing-lead')
-        const closingBtn = closingSection.querySelector('.services-page__closing-btn')
+      if (closingSection && !reduceMotion) {
+        const closingBits = closingSection.querySelectorAll(
+          '.services-page__closing-eyebrow, .closing-word, .services-page__closing-lead, .services-page__closing-btn',
+        )
 
-        const closingTl = gsap.timeline({
+        gsap.from(closingBits, {
+          y: 22,
+          duration: 0.55,
+          stagger: 0.06,
+          ease: 'power3.out',
+          clearProps: 'transform',
           scrollTrigger: {
             trigger: closingSection,
-            start: 'top 82%',
+            start: 'top 88%',
             once: true,
           },
         })
-
-        if (closingEyebrow) {
-          closingTl.fromTo(
-            closingEyebrow,
-            { autoAlpha: 0, y: -16 },
-            { autoAlpha: 1, y: 0, duration: 0.6, ease: 'power2.out' }
-          )
-        }
-
-        if (closingWords.length > 0) {
-          closingTl.fromTo(
-            closingWords,
-            {
-              autoAlpha: 0,
-              y: 42,
-              rotateX: 45,
-              transformOrigin: '0% 50% -30px',
-            },
-            {
-              autoAlpha: 1,
-              y: 0,
-              rotateX: 0,
-              duration: 0.9,
-              stagger: 0.1,
-              ease: 'power3.out',
-            },
-            '-=0.3'
-          )
-        }
-
-        if (closingLead) {
-          closingTl.fromTo(
-            closingLead,
-            { autoAlpha: 0, y: 22 },
-            { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power2.out' },
-            '-=0.4'
-          )
-        }
-
-        if (closingBtn) {
-          closingTl.fromTo(
-            closingBtn,
-            { autoAlpha: 0, y: 24, scale: 0.96 },
-            { autoAlpha: 1, y: 0, scale: 1, duration: 0.7, ease: 'back.out(1.3)' },
-            '-=0.3'
-          )
-        }
       }
     }, pageRef)
 
@@ -483,7 +373,7 @@ function ServicesPage() {
             aria-labelledby="services-hero-title"
           >
             <div className="service-hero__video-layer">
-              {!videoError ? (
+              {!videoError && videoReady ? (
                 <video
                   ref={videoRef}
                   className="service-hero__video"
@@ -492,7 +382,7 @@ function ServicesPage() {
                   muted
                   loop
                   playsInline
-                  preload="auto"
+                  preload="none"
                   poster="/images/sea_optimized.jpg"
                   aria-hidden="true"
                   tabIndex={-1}
@@ -563,7 +453,8 @@ function ServicesPage() {
                     className="service-panel__img"
                     src={service.image}
                     alt={`${service.title} logistics`}
-                    loading={index === 0 ? 'eager' : 'lazy'}
+                    loading={index < 3 ? 'eager' : 'lazy'}
+                    fetchPriority={index === 0 ? 'high' : 'low'}
                     decoding="async"
                   />
                   <div className="service-panel__image-scrim" aria-hidden="true" />
@@ -605,11 +496,8 @@ function ServicesPage() {
 
                     <div className="service-panel__copy-rule" aria-hidden="true" />
 
-                    <p
-                      className="service-panel__description"
-                      aria-label={serviceDescriptions[index] || service.description}
-                    >
-                      {renderWords(serviceDescriptions[index] || service.description)}
+                    <p className="service-panel__description">
+                      {serviceDescriptions[index] || service.description}
                     </p>
 
                     <div className="service-panel__actions">

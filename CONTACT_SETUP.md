@@ -24,7 +24,7 @@ where the site will run:
 | Variable | Purpose |
 | --- | --- |
 | `RESEND_API_KEY` | Secret Resend API key. Keep it server-side; never prefix it with `VITE_`. |
-| `CONTACT_TO_EMAIL` | Inbox that should receive enquiries. The existing site lists `Awan@acplogs.com`. |
+| `CONTACT_TO_EMAIL` | Inbox that should receive enquiries. The existing site lists `Inquire@acplogs.com`. |
 | `CONTACT_FROM_EMAIL` | Sender address on the domain verified with Resend, for example `ACP Logistics <website@your-verified-domain.com>`. Replace the example with a real verified sender. |
 
 Redeploy after setting or changing these values. The sender domain must be

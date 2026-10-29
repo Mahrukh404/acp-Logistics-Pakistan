@@ -3,6 +3,7 @@ import {
   LoaderCircle,
   Mail,
   MapPin,
+  MessageCircle,
   Phone,
   ShieldCheck,
   ArrowUpRight,
@@ -119,7 +120,7 @@ function ContactPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: prefersReducedMotion ? 0 : 0.75, ease: [0.16, 1, 0.3, 1] }}
       >
-        <h1>Let’s discuss your logistics needs.</h1>
+        <h1>Contact Us</h1>
         <p className="contact-page__intro-lead">
           Tell us what you’re moving and how we can help. Our team coordinates across international
           borders to deliver dependable, tailored freight solutions for your business.
@@ -143,7 +144,7 @@ function ContactPage() {
 
           <address className="contact-details__list">
             <motion.a
-              href="mailto:Awan@acplogs.com"
+              href="mailto:Inquire@acplogs.com"
               className="contact-card contact-card--interactive"
               onMouseMove={handleCardMouseMove}
               onMouseLeave={handleCardMouseLeave}
@@ -156,7 +157,7 @@ function ContactPage() {
               </div>
               <div className="contact-card__info">
                 <span className="contact-details__label">Email Us</span>
-                <span className="contact-details__value">Awan@acplogs.com</span>
+                <span className="contact-details__value">Inquire@acplogs.com</span>
               </div>
             </motion.a>
 
@@ -175,6 +176,26 @@ function ContactPage() {
               <div className="contact-card__info">
                 <span className="contact-details__label">Call Direct</span>
                 <span className="contact-details__value">+92-41-8738133</span>
+              </div>
+            </motion.a>
+
+            <motion.a
+              href="https://wa.me/923009660045"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="contact-card contact-card--interactive"
+              onMouseMove={handleCardMouseMove}
+              onMouseLeave={handleCardMouseLeave}
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              <div className="contact-details__icon contact-details__icon--whatsapp">
+                <MessageCircle aria-hidden="true" size={20} />
+              </div>
+              <div className="contact-card__info">
+                <span className="contact-details__label">WhatsApp</span>
+                <span className="contact-details__value">03009660045</span>
               </div>
             </motion.a>
 

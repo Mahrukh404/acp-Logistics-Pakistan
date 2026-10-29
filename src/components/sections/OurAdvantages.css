@@ -2,6 +2,8 @@
 @import 'tailwindcss/utilities.css' layer(utilities);
 
 .our-advantages {
+  position: relative;
+  z-index: 0;
   width: 100%;
 }
 
@@ -25,10 +27,19 @@
   margin-left: 0;
 }
 
+@media (min-width: 1024px) {
+  .our-advantages__title-wrap {
+    position: sticky;
+    /* Sit below the fixed header; no translate so it won't bleed into sections above */
+    top: 7.5rem;
+    z-index: 1;
+  }
+}
+
 .our-advantages__heading {
   margin: 0;
   color: #131950;
-  font-size: clamp(64px, 7.2vw, 120px);
+  font-size: clamp(48px, 5.4vw, 88px);
 }
 
 .our-advantages__list {
@@ -90,7 +101,7 @@
 
 @media (max-width: 1023px) {
   .our-advantages__heading {
-    font-size: clamp(62px, 8.5vw, 86px);
+    font-size: clamp(46px, 7vw, 68px);
   }
 
   .our-advantages__card {
@@ -110,7 +121,7 @@
   }
 
   .our-advantages__heading {
-    font-size: clamp(58px, 13vw, 82px);
+    font-size: clamp(42px, 11vw, 62px);
   }
 
   .our-advantages__list {

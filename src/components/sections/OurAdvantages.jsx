@@ -36,12 +36,12 @@ const advantages = [
 function OurAdvantages() {
   return (
     <section
-      className="our-advantages relative isolate z-10 mb-16 bg-white py-20 text-[#131950] lg:mb-24 lg:py-32"
+      className="our-advantages relative mb-16 bg-white py-20 text-[#131950] lg:mb-24 lg:py-32"
       id="advantages"
       aria-labelledby="our-advantages-title"
     >
       <div className="our-advantages__layout mx-auto grid max-w-[1600px] grid-cols-1 items-start gap-8 px-[clamp(28px,6vw,88px)] lg:grid-cols-12 lg:gap-12 max-[640px]:px-5">
-        <div className="our-advantages__title-wrap h-fit min-w-0 self-start lg:col-span-5 lg:sticky lg:top-24 lg:z-10">
+        <div className="our-advantages__title-wrap h-fit min-w-0 self-start lg:col-span-5">
           <h2
             className="section-display-heading our-advantages__heading m-0 flex flex-col uppercase"
             id="our-advantages-title"
@@ -51,7 +51,7 @@ function OurAdvantages() {
           </h2>
         </div>
 
-        <div className="our-advantages__list flex min-w-0 flex-col pb-12 lg:col-span-7 lg:pb-20">
+        <div className="our-advantages__list flex min-w-0 flex-col lg:col-span-7">
           {advantages.map((advantage, index) => (
             <article
               className="our-advantages__card"

@@ -107,15 +107,6 @@ function Header() {
         </nav>
 
         <div className="site-header__actions">
-          <a
-            className="quote-button"
-            href="/contact"
-            onClick={(e) => handleNavClick(e, '/contact')}
-          >
-            <span>Get a Quote</span>
-            <ArrowUpRight aria-hidden="true" size={16} strokeWidth={1.8} />
-          </a>
-
           <button
             className="menu-toggle"
             type="button"
@@ -168,15 +159,6 @@ function Header() {
                 <ArrowUpRight aria-hidden="true" size={17} strokeWidth={1.7} />
               </motion.a>
             ))}
-
-            <a
-              className="mobile-navigation__quote"
-              href="/contact"
-              onClick={(e) => handleNavClick(e, '/contact')}
-            >
-              Get a Quote
-              <ArrowUpRight aria-hidden="true" size={17} strokeWidth={1.8} />
-            </a>
           </motion.nav>
         )}
       </AnimatePresence>
