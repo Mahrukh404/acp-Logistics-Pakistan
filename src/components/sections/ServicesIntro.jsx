@@ -187,7 +187,7 @@ function ServicesIntro() {
 
         <a
           className="services-showcase__cta"
-          href={`/contact?service=${encodeURIComponent(activeService.title)}`}
+          href={`/services#service-${String(activeIndex + 1).padStart(2, '0')}`}
         >
           <span>Explore {activeService.title}</span>
           <ArrowUpRight aria-hidden="true" size={18} strokeWidth={1.8} />

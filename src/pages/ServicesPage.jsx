@@ -72,6 +72,24 @@ function ServicesPage() {
     return () => window.clearTimeout(timer)
   }, [])
 
+  // Mobile / stacked layout: jump to #service-XX after page transition
+  useEffect(() => {
+    const hash = window.location.hash
+    if (!hash || hash === '#top') return undefined
+
+    const isDesktopHorizontal = window.matchMedia(DESKTOP_QUERY).matches
+    if (isDesktopHorizontal) return undefined
+
+    const target = document.getElementById(hash.slice(1))
+    if (!target) return undefined
+
+    const timer = window.setTimeout(() => {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 480)
+
+    return () => window.clearTimeout(timer)
+  }, [])
+
   useLayoutEffect(() => {
     const page = pageRef.current
     const stage = stageRef.current
@@ -268,17 +286,22 @@ function ServicesPage() {
 
         window.addEventListener('resize', onResize)
 
-        requestAnimationFrame(() => {
+        const applyHashScroll = () => {
           sizePanels()
           ScrollTrigger.refresh()
           const hashIndex = getPanelIndexFromHash(window.location.hash)
-          if (hashIndex >= 0 && horizontalTriggerRef.current) {
-            const trigger = horizontalTriggerRef.current
-            const top =
-              trigger.start +
-              (hashIndex / Math.max(panels.length - 1, 1)) * (trigger.end - trigger.start)
-            window.scrollTo({ top, behavior: 'auto' })
-          }
+          if (hashIndex < 0 || !horizontalTriggerRef.current) return
+          const trigger = horizontalTriggerRef.current
+          const top =
+            trigger.start +
+            (hashIndex / Math.max(panels.length - 1, 1)) * (trigger.end - trigger.start)
+          window.scrollTo({ top, behavior: 'auto' })
+        }
+
+        requestAnimationFrame(() => {
+          applyHashScroll()
+          // Page transition finishes a beat later — re-apply so hash lands correctly
+          window.setTimeout(applyHashScroll, 520)
         })
 
         return () => {
@@ -337,7 +360,7 @@ function ServicesPage() {
       const closingSection = page.querySelector('.services-page__closing')
       if (closingSection && !reduceMotion) {
         const closingBits = closingSection.querySelectorAll(
-          '.services-page__closing-eyebrow, .closing-word, .services-page__closing-lead, .services-page__closing-btn',
+          '.services-page__closing-eyebrow, .services-page__closing-title, .services-page__closing-lead, .services-page__closing-btn',
         )
 
         gsap.from(closingBits, {
@@ -544,21 +567,7 @@ function ServicesPage() {
         <div className="services-page__closing-content">
           <p className="services-page__closing-eyebrow">LET&apos;S MOVE FORWARD</p>
           <h2 id="closing-title" className="services-page__closing-title">
-            <span className="closing-word-wrap">
-              <span className="closing-word">Have</span>
-            </span>{' '}
-            <span className="closing-word-wrap">
-              <span className="closing-word">a</span>
-            </span>{' '}
-            <span className="closing-word-wrap">
-              <span className="closing-word">shipment</span>
-            </span>{' '}
-            <span className="closing-word-wrap">
-              <span className="closing-word">in</span>
-            </span>{' '}
-            <span className="closing-word-wrap">
-              <span className="closing-word">mind?</span>
-            </span>
+            Have a shipment in mind?
           </h2>
           <p className="services-page__closing-lead">
             We tailor end-to-end freight forwarding, storage, and customs logistics to your timeline and cargo.

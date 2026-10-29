@@ -242,7 +242,6 @@ function AboutPage() {
 
       if (commitSection && commitHeadingWords.length > 0) {
         gsap.from(commitHeadingWords, {
-          autoAlpha: 0,
           y: 40,
           duration: 0.85,
           stagger: 0.14,
@@ -258,7 +257,6 @@ function AboutPage() {
 
       if (commitSection && commitRightElements.length > 0) {
         gsap.from(commitRightElements, {
-          autoAlpha: 0,
           y: 28,
           duration: 0.75,
           stagger: 0.12,
@@ -628,14 +626,10 @@ function AboutPage() {
         <div className="about-commitment__container">
           <div className="about-commitment__layout">
             <div className="about-commitment__left">
-              <p className="about-commitment__eyebrow about-commitment__enter">
-                Promise in motion
-              </p>
               <h2 id="about-commitment-title" className="about-commitment__title">
                 <span className="about-commitment__title-word">Our</span>
                 <span className="about-commitment__title-word">Commitment</span>
               </h2>
-              <div className="about-commitment__accent about-commitment__enter" aria-hidden="true" />
             </div>
 
             <div className="about-commitment__right">

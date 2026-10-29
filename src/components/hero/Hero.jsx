@@ -6,7 +6,7 @@ import {
   useSpring,
   useTransform,
 } from 'motion/react'
-import { ArrowDown, ArrowRight } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { gsap } from '../../animations/gsap.js'
 import './Hero.css'
 
@@ -26,57 +26,45 @@ function Hero() {
     if (!section) return undefined
 
     const animItems = section.querySelectorAll('.hero-anim')
-    const scrollCue = section.querySelector('.hero-section__scroll')
 
     if (prefersReducedMotion) {
-      gsap.set([animItems, scrollCue], { clearProps: 'visibility,opacity,transform' })
+      gsap.set(animItems, { clearProps: 'visibility,opacity,transform' })
       return undefined
     }
 
     const context = gsap.context(() => {
-      const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+      gsap.from(animItems, {
+        autoAlpha: 0,
+        y: 35,
+        duration: 0.85,
+        stagger: 0.14,
+        clearProps: 'transform',
+        ease: 'power3.out',
+      })
 
-      heroTl
-        .from(animItems, {
-          autoAlpha: 0,
-          y: 35,
-          duration: 0.85,
-          stagger: 0.14,
-          clearProps: 'transform',
-        })
-        .from(
-          scrollCue,
+      // Skip vertical scrub on small screens so CTAs stay fully visible
+      if (window.innerWidth > 640) {
+        gsap.fromTo(
+          scrollContentRef.current,
+          { y: 0 },
           {
-            autoAlpha: 0,
-            y: 16,
-            duration: 0.6,
-            ease: 'power2.out',
-            clearProps: 'transform',
+            y: -118,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: section,
+              start: 'top top',
+              end: 'bottom top',
+              scrub: 0.8,
+              invalidateOnRefresh: true,
+            },
           },
-          '-=0.35',
         )
-
-      gsap.fromTo(
-        scrollContentRef.current,
-        { y: 0 },
-        {
-          y: () => (window.innerWidth <= 640 ? -72 : -118),
-          ease: 'none',
-          scrollTrigger: {
-            trigger: section,
-            start: 'top top',
-            end: () =>
-              window.innerWidth <= 640 ? 'bottom 25%' : 'bottom top',
-            scrub: 0.8,
-            invalidateOnRefresh: true,
-          },
-        },
-      )
+      }
     }, section)
 
     return () => {
       context.revert()
-      gsap.set([animItems, scrollCue], { clearProps: 'visibility,opacity,transform' })
+      gsap.set(animItems, { clearProps: 'visibility,opacity,transform' })
     }
   }, [prefersReducedMotion])
 
@@ -132,13 +120,6 @@ function Hero() {
           </div>
         </motion.div>
       </div>
-
-      <a className="hero-section__scroll" href="#about">
-        <span>Scroll to explore</span>
-        <span className="hero-section__scroll-line" aria-hidden="true">
-          <ArrowDown size={14} strokeWidth={1.6} />
-        </span>
-      </a>
     </section>
   )
 }

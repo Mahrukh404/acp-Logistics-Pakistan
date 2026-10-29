@@ -630,7 +630,7 @@
   color: #f4f6f3;
   text-align: center;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .services-page__closing::before {
@@ -664,27 +664,18 @@
 
 .services-page__closing-title {
   margin: 16px 0 0;
+  width: 100%;
+  max-width: 18ch;
   color: #ffffff;
   font-family: 'Barlow Condensed', 'Oswald', sans-serif;
-  font-size: clamp(44px, 6.8vw, 84px);
+  font-size: clamp(36px, 7vw, 84px);
   font-weight: 800;
-  line-height: 0.95;
+  line-height: 1.05;
   text-transform: uppercase;
   letter-spacing: -0.02em;
+  text-wrap: balance;
   text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-  perspective: 1000px;
-}
-
-.closing-word-wrap {
-  display: inline-block;
-  overflow: hidden;
-  vertical-align: bottom;
-}
-
-.closing-word {
-  display: inline-block;
-  transform-origin: 0% 50% -30px;
-  will-change: transform, opacity;
+  overflow: visible;
 }
 
 .services-page__closing-lead {
@@ -841,8 +832,15 @@
   }
 
   .services-page__closing {
-    padding: 80px 20px;
+    padding: 88px 20px 96px;
     min-height: auto;
+    overflow: visible;
+  }
+
+  .services-page__closing-title {
+    max-width: 100%;
+    font-size: clamp(34px, 9vw, 56px);
+    line-height: 1.08;
   }
 
   .services-page__closing-actions {

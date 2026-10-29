@@ -72,8 +72,6 @@ function CEOQuote() {
 
       <div className="ceo-quote__inner">
         <div className="ceo-quote__copy">
-          <p className="ceo-quote__eyebrow ceo-quote__anim">Message from the CEO</p>
-
           <div className="ceo-quote__mark ceo-quote__anim" aria-hidden="true">
             <img src="/images/quotes.svg" alt="" width="48" height="36" />
           </div>
